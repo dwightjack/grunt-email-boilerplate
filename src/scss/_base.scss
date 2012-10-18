@@ -1,0 +1,37 @@
+/* Some sensible defaults for images
+Bring inline: Yes. */
+img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;}
+a img {border:none;}
+.image_fix {display:block;}
+
+/* Yahoo paragraph fix
+Bring inline: Yes. */
+p {margin: 1em 0;}
+
+/* Hotmail header color reset
+Bring inline: Yes. */
+h1, h2, h3, h4, h5, h6 {color: $base-heading-color !important;}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: $base-link-color !important;}
+
+h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+color: $base-link-active-color !important; /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+color: $base-link-visited-color !important; /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+/* Outlook 07, 10 Padding issue fix
+Bring inline: No.*/
+table td {border-collapse: collapse;}
+
+/* Remove spacing around Outlook 07, 10 tables
+Bring inline: Yes */
+table { border-collapse:collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+
+/* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email and make sure to bring your styles inline.  Your link colors will be uniform across clients when brought inline.
+Bring inline: Yes. */
+a {color: $base-link-color; }
+
+body { margin: 0; padding: 0; }
