@@ -5,6 +5,8 @@ module.exports = function(grunt) {
 	var path = require('path'),
 		_ = grunt.utils._;
 
+console.log(grunt.task.current.flags);
+
 	// Project configuration.
 	grunt.initConfig({
 		meta: {
@@ -43,7 +45,9 @@ module.exports = function(grunt) {
 			dist: {
 				src: '<%= paths.src %>/email.html',
 				dest: '<%= paths.dist %>/email.html',
-				options: {}
+				options: {
+					base_url: 'http://www.test.it/'
+				}
 			}
 		},
 
@@ -60,32 +64,23 @@ module.exports = function(grunt) {
 		watch: {
 			files: ['scss/**/*.scss'],
 			tasks: 'compass:dev'
-		}
-
-		/*,
-		jshint: {
-			options: {
-				curly: true,
-				immed: true,
-				latedef: true,
-				newcap: true,
-				noarg: true,
-				boss: true,
-		regexdash: true,
-		wsh: true,
-		trailing: true,
-		sub: true,
-		smarttabs: true,
-		expr: true,
-		undef: true,
-		browser: true
-			},
-			globals: {
-				jQuery: true,
-				same: true
-			}
 		},
-		uglify: {}*/
+
+		serve: {
+
+			dev: {
+				port: 8000,
+				base: '<%= paths.src %>',
+				keepalive: true
+			},
+
+			dist: {
+				port: 8000,
+				base: '<%= paths.dist %>'
+			}
+
+		  }
+
 	});
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
@@ -95,6 +90,8 @@ module.exports = function(grunt) {
 
 
 	grunt.registerTask('dist', 'img:dist compass:dist premailer:dist');
+
+	grunt.registerTask('dev', 'serve:dev watch');
 
 
 };

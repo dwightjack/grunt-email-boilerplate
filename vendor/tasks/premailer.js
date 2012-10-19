@@ -8,10 +8,9 @@ module.exports = function( grunt ) {
   'use strict';
 
   var _ = grunt.utils._;
-  var command = 'premailer';// + (process.platform === 'win32' ? '.bat' : '');
+  var command = 'ruby.exe';
   var template = grunt.template;
   var fs = require('fs');
-  var exec  = require('child_process').exec;
 
   function optsToArgs( opts ) {
     var args = [];
@@ -41,40 +40,32 @@ module.exports = function( grunt ) {
 
   grunt.registerMultiTask( 'premailer', 'Compass task', function() {
     var done = this.async();
-    var args = optsToArgs( this.data.options );
-    var src = this.file.src;
+    var args = ['vendor/premailer-parser.rb'].concat(optsToArgs(this.data.options));
+    var src = grunt.file.read(this.file.src);
     var dest_html = this.file.dest;
     var dest_txt = dest_html.replace(/\.html?$/, '.txt');
+    var tmpFile = template.process('<%= paths.dist %>/_tmp_email.html');
+
+    //copy content to the temp file
+    grunt.file.write(tmpFile, src);
 
 
-    args.push( src );
-    /*var premailer = grunt.utils.spawn({
+    args.push('--file-in', tmpFile, '--file-out-html', dest_html, '--file-out-txt', dest_txt);
+
+    var premailer = grunt.utils.spawn({
       cmd: command,
       args: args
     }, function( err, result, code ) {
       if ( /not found/.test( err ) ) {
         grunt.fail.fatal('You need to have Premailer installed.');
-      } else {
-        console.log(result.result);
       }
-      cb( code === 0 || !result.stdout );
+      //remove the tmp file
+      fs.unlinkSync(tmpFile);
+      done( code === 0 );
     });
 
     premailer.stdout.pipe( process.stdout );
-    premailer.stderr.pipe( process.stderr );*/
-
-
-
-    var premailer  = exec('premailer.bat ' + src , function( err, stdout, stderr ) {
-      if ( /not found/.test( err ) ) {
-        grunt.fail.fatal('You need to have Premailer installed.');
-      } else {
-        grunt.file.write(dest_html, stdout);
-      }
-      done();
-     // cb( code === 0 || !result.stdout );
-    });
-
+    premailer.stderr.pipe( process.stderr );
 
   });
 };
