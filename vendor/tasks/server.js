@@ -18,9 +18,9 @@ module.exports = function(grunt) {
 
   var _ = grunt.utils._;
 
-  grunt.registerMultiTask('serve', 'Start a static web server.', function() {
+  grunt.registerMultiTask('server', 'Start a static web server.', function() {
     // Merge task-specific options with these defaults.
-    var options = _.defaults(this.data.options || {}, {
+    var options = _.defaults(this.data || {}, {
       port: 8000,
       hostname: 'localhost',
       base: '.',
@@ -28,7 +28,8 @@ module.exports = function(grunt) {
     });
 
     // Connect requires the base path to be absolute.
-    var base = path.resolve(options.base);
+    var base = path.resolve(grunt.template.process(options.base));
+
 
     // Sweet, sweet middleware.
     var middleware = [
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
     if (this.flags.keepalive || options.keepalive) {
       // This is now an async task. Since we don't store a handle to the "done"
       // function, this task will never, ever, ever terminate. Have fun!
-      this.async();
+      //this.async();
       grunt.log.write('Waiting forever...');
     }
   });

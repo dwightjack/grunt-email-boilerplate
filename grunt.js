@@ -5,8 +5,6 @@ module.exports = function(grunt) {
 	var path = require('path'),
 		_ = grunt.utils._;
 
-console.log(grunt.task.current.flags);
-
 	// Project configuration.
 	grunt.initConfig({
 		meta: {
@@ -66,12 +64,11 @@ console.log(grunt.task.current.flags);
 			tasks: 'compass:dev'
 		},
 
-		serve: {
+		server: {
 
 			dev: {
 				port: 8000,
-				base: '<%= paths.src %>',
-				keepalive: true
+				base: '<%= paths.src %>'
 			},
 
 			dist: {
@@ -91,7 +88,7 @@ console.log(grunt.task.current.flags);
 
 	grunt.registerTask('dist', 'img:dist compass:dist premailer:dist');
 
-	grunt.registerTask('dev', 'serve:dev watch');
+	grunt.registerTask('dev', 'server:dev watch');
 
 
 };
