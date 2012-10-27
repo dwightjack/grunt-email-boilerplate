@@ -166,3 +166,4 @@ pip-log.txt
 
 # custom
 dist*/
+smtptransp.json

@@ -57,6 +57,20 @@ module.exports = function(grunt) {
 			}
 		},
 
+		send: {
+			dist: {
+				transport: '<json:smtptransp.json>',
+				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
+				recipients: [
+					{
+						email: 'test@gmail.com',
+						name: 'Recipient name'
+					}
+				]
+			}
+
+		},
+
 
 
 		watch: {
@@ -85,10 +99,11 @@ module.exports = function(grunt) {
 	// Default task.
 	grunt.registerTask('default', 'compass:dist');
 
+	grunt.registerTask('dev', 'server:dev watch');
 
 	grunt.registerTask('dist', 'img:dist compass:dist premailer:dist');
 
-	grunt.registerTask('dev', 'server:dev watch');
+	grunt.registerTask('test', 'dist send:dist');
 
 
 };
