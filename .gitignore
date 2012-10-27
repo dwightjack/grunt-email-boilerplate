@@ -167,3 +167,4 @@ pip-log.txt
 # custom
 dist*/
 smtptransp.json
+vendor/node_modules
