@@ -8,7 +8,7 @@ module.exports = function( grunt ) {
   'use strict';
 
   var _ = grunt.utils._;
-  var command = 'ruby.exe';
+  var command = 'ruby' + (process.platform === 'win32' ? '.exe' : '');
   var template = grunt.template;
   var fs = require('fs');
 

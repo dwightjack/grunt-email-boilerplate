@@ -75,6 +75,7 @@ module.exports = function( grunt ) {
 						return;
 				}
 				grunt.log.writeln(('Message sent successfully!').green);
+				done(true);
 		});
 
 
