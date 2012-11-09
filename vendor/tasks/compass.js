@@ -8,7 +8,7 @@
 module.exports = function( grunt ) {
   'use strict';
 
-  var _ = grunt.utils._;
+  var _ = ('util' in grunt ? grunt.util : grunt.utils)._; //grunt 0.4 compat
   var command = 'compass' + (process.platform === 'win32' ? '.bat' : '');
   var template = grunt.template;
   var fs = require('fs');
@@ -45,7 +45,7 @@ module.exports = function( grunt ) {
     var project_path = template.process(this.data.project_path || '');
 
     //check if this folder exists
-    if (!fs.existsSync(project_path)) {
+    if (!_.isEmpty(project_path) && !fs.existsSync(project_path)) {
       fs.mkdirSync(project_path);
     }
 

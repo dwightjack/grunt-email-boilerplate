@@ -7,8 +7,10 @@ module.exports = function(grunt) {
 
 	// Project configuration.
 	grunt.initConfig({
+
+		pkg: '<json:package.json>',
+
 		meta: {
-			version: '0.1.0',
 			banner: ''
 		},
 
