@@ -61,12 +61,19 @@ module.exports = function(grunt) {
 
 		send: {
 			dist: {
-				transport: '<json:smtptransp.json>',
+				transport: {
+					"type": "SMTP",
+					"service": "Gmail",
+					"auth": {
+					    "user": "john.doe@gmail.com",
+					    "pass": "a.password!"
+					}
+				},
 				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
 				recipients: [
 					{
-						email: 'test@gmail.com',
-						name: 'Recipient name'
+						email: 'jane.doe@gmail.com',
+						name: 'Jane Doe'
 					}
 				]
 			}
