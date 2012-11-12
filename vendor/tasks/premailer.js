@@ -7,7 +7,8 @@
 module.exports = function( grunt ) {
   'use strict';
 
-  var _ = grunt.utils._;
+  var util = ('util' in grunt ? grunt.util : grunt.utils); //grunt 0.4 compat
+  var _ = util._;
   var command = 'ruby' + (process.platform === 'win32' ? '.exe' : '');
   var template = grunt.template;
   var fs = require('fs');
@@ -52,7 +53,7 @@ module.exports = function( grunt ) {
 
     args.push('--file-in', tmpFile, '--file-out-html', dest_html, '--file-out-txt', dest_txt);
 
-    var premailer = grunt.utils.spawn({
+    var premailer = util.spawn({
       cmd: command,
       args: args
     }, function( err, result, code ) {

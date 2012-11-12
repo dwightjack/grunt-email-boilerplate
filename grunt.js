@@ -20,6 +20,10 @@ module.exports = function(grunt) {
 			src: 'src'
 		},
 
+		clean: {
+			dist: ['<%= paths.dist %>']
+		},
+
 		compass: {
 
 			dev: {
@@ -46,7 +50,7 @@ module.exports = function(grunt) {
 				src: '<%= paths.src %>/email.html',
 				dest: '<%= paths.dist %>/email.html',
 				options: {
-					base_url: 'http://www.test.it/'
+					base_url: 'http://localhost/'
 				}
 			}
 		},
@@ -61,14 +65,19 @@ module.exports = function(grunt) {
 
 		send: {
 			dist: {
-				transport: {
+				/**
+				 * Defaults to sendmail
+				 * Here follows a Gmail SMTP exeample trasport
+				 * @see https://github.com/andris9/Nodemailer
+				 */
+				/*transport: {
 					"type": "SMTP",
 					"service": "Gmail",
 					"auth": {
 					    "user": "john.doe@gmail.com",
 					    "pass": "a.password!"
 					}
-				},
+				},*/
 				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
 				recipients: [
 					{
@@ -96,7 +105,8 @@ module.exports = function(grunt) {
 
 			dist: {
 				port: 8000,
-				base: '<%= paths.dist %>'
+				base: '<%= paths.dist %>',
+				keepalive: true
 			}
 
 		  }
@@ -110,9 +120,9 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', 'server:dev watch');
 
-	grunt.registerTask('dist', 'img:dist compass:dist premailer:dist');
+	grunt.registerTask('dist', 'clean:dist img:dist compass:dist premailer:dist');
 
-	grunt.registerTask('test', 'dist send:dist');
+	grunt.registerTask('test', 'dist send:dist server:dist');
 
 
 };

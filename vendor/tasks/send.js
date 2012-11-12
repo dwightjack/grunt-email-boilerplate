@@ -7,7 +7,7 @@
 module.exports = function( grunt ) {
 	'use strict';
 
-	var _ = grunt.utils._;
+	var _ = ('util' in grunt ? grunt.util : grunt.utils)._; //grunt 0.4 compat
 	var util = require('util');
 	var nodemailer = require('nodemailer');
 
@@ -29,7 +29,7 @@ module.exports = function( grunt ) {
 		if (_.isObject(options.transport)) {
 			transport = nodemailer.createTransport(options.transport.type, options.transport);
 		} else {
-			transport = nodemailer.createTransport("Sendmail", "/usr/sbin/sendmail");
+			transport = nodemailer.createTransport("sendmail");
 		}
 
 		src_html = grunt.file.read(src.shift());

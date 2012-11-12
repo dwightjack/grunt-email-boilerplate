@@ -4,7 +4,8 @@ module.exports = function( grunt ) {
 
   var fs = require('fs'),
     path = require('path'),
-    which = require('which');
+    which = require('which'),
+    util = ('util' in grunt ? grunt.util : grunt.utils); //grunt 0.4 compat;
 
   var win32 = process.platform === 'win32';
 
@@ -21,7 +22,7 @@ module.exports = function( grunt ) {
             jpgConfig = grunt.config('jpegtran'),
             recursive =  grunt.config('recursive') || true;
 
-        if( grunt.utils.kindOf( source ) === 'string' && path.extname( source ).length === 0 && recursive ) {
+        if( util.kindOf( source ) === 'string' && path.extname( source ).length === 0 && recursive ) {
             var filesList = [];
             grunt.file.recurse(source,function(abspath){
                 if(abspath){
@@ -73,7 +74,7 @@ module.exports = function( grunt ) {
                 args.push('-dir', output, '-clobber');
             }
 
-            var optipng = grunt.utils.spawn({
+            var optipng = util.spawn({
                 cmd: cmdpath,
                 args: args
             }, function() {});
@@ -97,7 +98,7 @@ module.exports = function( grunt ) {
 
                 grunt.log.subhead('** Processing: ' + file);
 
-                var jpegtran = grunt.utils.spawn({
+                var jpegtran = util.spawn({
                     cmd: cmdpath,
                     args: opts.args.concat(file)
                 }, function() {});
@@ -139,16 +140,6 @@ module.exports = function( grunt ) {
 
         fs.unlinkSync(tempFile);
         callback();
-        /*var commands;
-
-        if (win32) {
-
-          commands = { cmd:'erase', args:['/F', tempFile]};
-          console.log(commands);
-        } else {
-          commands = { cmd:'rm', args:['-rf',tempFile]};
-        }
-        grunt.utils.spawn(commands, callback);*/
 
     });
 
