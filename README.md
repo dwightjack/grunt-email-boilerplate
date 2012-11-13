@@ -77,7 +77,7 @@ Extends `dist` task by sending the compiled email to any configured recipient an
 
 ###Tasks Customization
 
-
+See `grunt.js` source for more options and customizations.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].

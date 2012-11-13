@@ -3,32 +3,55 @@ module.exports = function(grunt) {
 	"use strict";
 
 	var path = require('path'),
-		_ = grunt.utils._;
+		_ = ('util' in grunt ? grunt.util : grunt.utils)._;
 
 	// Project configuration.
 	grunt.initConfig({
 
 		pkg: '<json:package.json>',
 
+		/* rigt now this is useless... */
 		meta: {
 			banner: ''
 		},
 
+		/**
+		 * Project Paths Configuration
+		 * ===============================
+		 */
 		paths: {
+			//images folder name
 			images: 'images',
+			//where to store built files
 			dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
+			//sources
 			src: 'src'
 		},
 
+		/**
+		 * Cleanup Tasks (used internally)
+		 * ===============================
+		 */
 		clean: {
 			dist: ['<%= paths.dist %>']
 		},
 
+
+
+		/**
+		 * SCSS Compilation Tasks
+		 * ===============================
+		 */
 		compass: {
 
 			dev: {
+				//set the parent folder of scss files
 				project_path : '<%= paths.src %>',
 				options: {
+					//accepts any compass command line option
+					//replace mid dashes `-` with underscores `_`
+					//ie: --sass-dir => sass_dir
+					//see http://compass-style.org/help/tutorials/command-line/
 					config: path.normalize(__dirname + '/vendor/compass-config.rb')
 				}
 			},
@@ -44,26 +67,50 @@ module.exports = function(grunt) {
 			}
 		},
 
-
+		/**
+		 * Premailer Parser Tasks
+		 * ===============================
+		 */
 		premailer: {
+
 			dist: {
+				//source file path
 				src: '<%= paths.src %>/email.html',
+				// parsed file path
 				dest: '<%= paths.dist %>/email.html',
 				options: {
+					//accepts any compass command line option
+					//replace mid dashes `-` with underscores `_`
+					//ie: --base-url => base_url
+					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
 					base_url: 'http://localhost/'
 				}
 			}
 		},
 
 
+
+		/**
+		 * Images Optimization Tasks
+		 * ===============================
+		 */
 		img: {
+
 			dist: {
+				//source images folder
 				src: '<%= paths.src %>/<%=paths.images %>',
+				//optimized images folder
 				dest: '<%= paths.dist %>/<%=paths.images %>'
 			}
 		},
 
+
+		/**
+		 * Test Mailer Tasks
+		 * ===============================
+		 */
 		send: {
+
 			dist: {
 				/**
 				 * Defaults to sendmail
@@ -78,7 +125,9 @@ module.exports = function(grunt) {
 					    "pass": "a.password!"
 					}
 				},*/
+				// HTML and TXT email
 				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
+				// A collection of recipients
 				recipients: [
 					{
 						email: 'jane.doe@gmail.com',
@@ -90,12 +139,19 @@ module.exports = function(grunt) {
 		},
 
 
-
+		/**
+		 * Watch Task (used internally)
+		 * ===============================
+		 */
 		watch: {
 			files: ['scss/**/*.scss'],
 			tasks: 'compass:dev'
 		},
 
+		/**
+		 * Server Tasks (used internally)
+		 * ===============================
+		 */
 		server: {
 
 			dev: {
@@ -106,6 +162,7 @@ module.exports = function(grunt) {
 			dist: {
 				port: 8000,
 				base: '<%= paths.dist %>',
+				//keep the server on
 				keepalive: true
 			}
 
@@ -115,7 +172,6 @@ module.exports = function(grunt) {
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
-	// Default task.
 	grunt.registerTask('default', 'compass:dist');
 
 	grunt.registerTask('dev', 'server:dev watch');
