@@ -18,9 +18,15 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('clean', 'Removes previously generated files and directories', function() {
     if (!this.data) { return false; }
 
-    grunt.helper('clean', this.data);
+    if (!Array.isArray(this.data)) {
+      this.data = [this.data];
+    }
+    this.data.forEach(function (path) {
+      var p = grunt.template.process(path);
+      grunt.helper('clean', p);
+      grunt.log.writeln("Folder \"" + p + "\" contents removed.");
+    });
 
-    grunt.log.writeln("Folder \"" + this.data + "\" contents removed.");
   });
 
   // ==========================================================================
@@ -33,7 +39,7 @@ module.exports = function(grunt) {
         path = require('path'),
         lstat = process.platform === "win32" ? "stat" : "lstat",
         lstatSync = lstat + "Sync",
-        d = path.resolve(p),
+        d = path.resolve( p ),
         s;
 
     try {
