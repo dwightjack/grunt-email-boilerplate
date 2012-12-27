@@ -12,6 +12,7 @@ module.exports = function( grunt ) {
   var command = 'compass' + (process.platform === 'win32' ? '.bat' : '');
   var template = grunt.template;
   var fs = require('fs');
+  var path = require('path');
 
   function optsToArgs( opts ) {
     var args = [];
@@ -42,11 +43,11 @@ module.exports = function( grunt ) {
   grunt.registerMultiTask( 'compass', 'Compass task', function() {
     var cb = this.async();
     var args = optsToArgs( this.data.options );
-    var project_path = template.process(this.data.project_path || '');
+    var project_path = path.resolve( template.process(this.data.project_path || '') );
 
     //check if this folder exists
-    if (!_.isEmpty(project_path) && !fs.existsSync(project_path)) {
-      fs.mkdirSync(project_path);
+    if (!_.isEmpty(project_path) && fs.existsSync(project_path) === false) {
+      grunt.file.mkdir(project_path);
     }
 
     var compass = grunt.utils.spawn({

@@ -1,0 +1,143 @@
+/* Some sensible defaults for images
+Bring inline: Yes. */
+/* line 3, ../scss/_base.scss */
+img {
+  outline: none;
+  text-decoration: none;
+  -ms-interpolation-mode: bicubic;
+}
+
+/* line 4, ../scss/_base.scss */
+a img {
+  border: none;
+}
+
+/* line 5, ../scss/_base.scss */
+.image_fix {
+  display: block;
+}
+
+/* Yahoo paragraph fix
+Bring inline: Yes. */
+/* line 9, ../scss/_base.scss */
+p {
+  margin: 1em 0;
+}
+
+/* Hotmail header color reset
+Bring inline: Yes. */
+/* line 13, ../scss/_base.scss */
+h1, h2, h3, h4, h5, h6 {
+  color: black !important;
+}
+
+/* line 15, ../scss/_base.scss */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: blue !important;
+}
+
+/* line 17, ../scss/_base.scss */
+h1 a:active, h2 a:active, h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+  color: #4040c4 !important;
+  /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+/* line 21, ../scss/_base.scss */
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+  color: #4040c4 !important;
+  /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+/* Outlook 07, 10 Padding issue fix
+Bring inline: No.*/
+/* line 27, ../scss/_base.scss */
+table td {
+  border-collapse: collapse;
+}
+
+/* Remove spacing around Outlook 07, 10 tables
+Bring inline: Yes */
+/* line 31, ../scss/_base.scss */
+table {
+  border-collapse: collapse;
+  mso-table-lspace: 0pt;
+  mso-table-rspace: 0pt;
+}
+
+/* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email and make sure to bring your styles inline.  Your link colors will be uniform across clients when brought inline.
+Bring inline: Yes. */
+/* line 35, ../scss/_base.scss */
+a {
+  color: blue;
+}
+
+/* line 37, ../scss/_base.scss */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 2, ../scss/_main.scss */
+#test {
+  color: red;
+}
+
+/***************************************************
+****************************************************
+MOBILE TARGETING
+****************************************************
+***************************************************/
+@media only screen and (max-device-width: 480px) {
+  /* Part one of controlling phone number linking for mobile. */
+  /* line 8, ../scss/_media-queries.scss */
+  a[href^="tel"], a[href^="sms"] {
+    text-decoration: none;
+    color: blue;
+    /* or whatever your want */
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* line 15, ../scss/_media-queries.scss */
+  .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+    text-decoration: default;
+    color: orange !important;
+    pointer-events: auto;
+    cursor: default;
+  }
+}
+/* More Specific Targeting */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* You guessed it, ipad (tablets, smaller screens, etc) */
+  /* repeating for the ipad */
+  /* line 29, ../scss/_media-queries.scss */
+  a[href^="tel"], a[href^="sms"] {
+    text-decoration: none;
+    color: blue;
+    /* or whatever your want */
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* line 36, ../scss/_media-queries.scss */
+  .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+    text-decoration: default;
+    color: orange !important;
+    pointer-events: auto;
+    cursor: default;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  /* Put your iPhone 4g styles in here */
+}
+/* Android targeting */
+@media only screen and (-webkit-device-pixel-ratio: 0.75) {
+  /* Put CSS for low density (ldpi) Android layouts in here */
+}
+@media only screen and (-webkit-device-pixel-ratio: 1) {
+  /* Put CSS for medium density (mdpi) Android layouts in here */
+}
+@media only screen and (-webkit-device-pixel-ratio: 1.5) {
+  /* Put CSS for high density (hdpi) Android layouts in here */
+}
+/* end Android targeting */

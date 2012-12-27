@@ -12,6 +12,7 @@ module.exports = function( grunt ) {
   var command = 'ruby' + (process.platform === 'win32' ? '.exe' : '');
   var template = grunt.template;
   var fs = require('fs');
+  var path = require('path');
 
   function optsToArgs( opts ) {
     var args = [];
@@ -45,7 +46,7 @@ module.exports = function( grunt ) {
     var src = grunt.file.read(this.file.src);
     var dest_html = this.file.dest;
     var dest_txt = dest_html.replace(/\.html?$/, '.txt');
-    var tmpFile = template.process('<%= paths.dist %>/_tmp_email.html');
+    var tmpFile = path.join( path.dirname(dest_html), '_tmp_premailer.html' );
 
     //copy content to the temp file
     grunt.file.write(tmpFile, src);

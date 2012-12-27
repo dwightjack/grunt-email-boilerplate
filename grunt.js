@@ -5,6 +5,11 @@ module.exports = function(grunt) {
 	var path = require('path'),
 		_ = ('util' in grunt ? grunt.util : grunt.utils)._;
 
+	var emailData = {
+		'name': 'John',
+		'surname': 'Doe'
+	};
+
 	// Project configuration.
 	grunt.initConfig({
 
@@ -28,6 +33,7 @@ module.exports = function(grunt) {
 			src: 'src'
 		},
 
+
 		/**
 		 * Cleanup Tasks (used internally)
 		 * ===============================
@@ -46,7 +52,7 @@ module.exports = function(grunt) {
 
 			dev: {
 				//set the parent folder of scss files
-				project_path : '<%= paths.src %>',
+				project_path : '<%= paths.src %>/assets',
 				options: {
 					//accepts any compass command line option
 					//replace mid dashes `-` with underscores `_`
@@ -57,13 +63,26 @@ module.exports = function(grunt) {
 			},
 
 			dist: {
-				project_path : '<%= paths.dist %>',
+				project_path : '<%= paths.dist %>/assets',
 				options: {
 					force: true,
 					environment: 'production',
-					sass_dir: '../<%= paths.src %>/scss',
+					sass_dir: '../../<%= paths.src %>/assets/scss',
 					config: path.normalize(__dirname + '/vendor/compass-config.rb')
 				}
+			}
+		},
+
+
+		/**
+		 * Static EJS Render Task
+		 * ===============================
+		 */
+		render: {
+			dist: {
+				src: '<%= paths.src %>/email.html',
+				dest: '<%= paths.dist %>/email.html',
+				params: emailData
 			}
 		},
 
@@ -75,7 +94,7 @@ module.exports = function(grunt) {
 
 			dist: {
 				//source file path
-				src: '<%= paths.src %>/email.html',
+				src: '<%= paths.dist %>/email.html',
 				// parsed file path
 				dest: '<%= paths.dist %>/email.html',
 				options: {
@@ -98,9 +117,9 @@ module.exports = function(grunt) {
 
 			dist: {
 				//source images folder
-				src: '<%= paths.src %>/<%=paths.images %>',
+				src: '<%= paths.src %>/assets/<%=paths.images %>',
 				//optimized images folder
-				dest: '<%= paths.dist %>/<%=paths.images %>'
+				dest: '<%= paths.dist %>/assets/<%=paths.images %>'
 			}
 		},
 
@@ -144,7 +163,7 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		watch: {
-			files: ['scss/**/*.scss'],
+			files: ['src/assets/scss/**/*.scss'],
 			tasks: 'compass:dev'
 		},
 
@@ -156,7 +175,9 @@ module.exports = function(grunt) {
 
 			dev: {
 				port: 8000,
-				base: '<%= paths.src %>'
+				base: '<%= paths.src %>',
+				render: true,
+				params: emailData
 			},
 
 			dist: {
@@ -176,7 +197,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', 'server:dev watch');
 
-	grunt.registerTask('dist', 'clean:dist img:dist compass:dist premailer:dist');
+	grunt.registerTask('dist', 'clean:dist img:dist compass:dist render:dist premailer:dist');
 
 	grunt.registerTask('test', 'dist send:dist server:dist');
 
