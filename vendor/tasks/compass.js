@@ -2,7 +2,6 @@
  * Compass Task
  *
  * @see https://github.com/yeoman/yeoman/blob/master/cli/tasks/compass.js
- * @param {Object} grunt
  */
 /*jshint node:true */
 module.exports = function( grunt ) {

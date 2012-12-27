@@ -1,7 +1,8 @@
 /**
  * Premailer Task
  *
- * @param {Object} grunt
+ * Copyright (c) 2012 Marco "DWJ" Solazzi
+ * Licensed under the MIT license.
  */
 /*jshint node:true */
 module.exports = function( grunt ) {

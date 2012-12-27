@@ -1,8 +1,11 @@
 /*
- * grunt-contrib-server
+ * grunt custom server
+ * Based on grunt-contrib-server
  * http://gruntjs.com/
  *
- * Copyright (c) 2012 "Cowboy" Ben Alman, contributors
+ * @see https://github.com/fengmk2/connect-render
+ *
+ * Copyright (c) 2012 "Cowboy" Ben Alman, Marco "DWJ" Solazzi, contributors
  * Licensed under the MIT license.
  */
 /*jshint node:true */
@@ -26,7 +29,7 @@ module.exports = function(grunt) {
 			hostname: 'localhost',
 			base: '.',
 			keepalive: false,
-			params: {},
+			//don't use render middleware by default
 			render: false
 		});
 
@@ -35,25 +38,47 @@ module.exports = function(grunt) {
 
 		// Sweet, sweet middleware.
 		var middleware = [];
+		var renderTask;
 
-		if (options.render === true) {
-			middleware.push(
-				render({
-					root: base,
-					layout: false,
-					cache: false, // `false` for debug
-					helpers: {}
-				}),
-
-				function (req, res, next) {
-					var filename;
-					if (/\.html$/.test(req.url)) {
-						res.render(path.basename(req.url), options.params);
-					} else {
-						next();
-					}
+		var req_render = function (options) {
+			var o = _.defaults(options || {}, {
+				root: base
+			});
+			return function (req, res, next) {
+				//only process html requests
+				if (/\.html$/.test(req.url)) {
+					res.render(path.basename(req.url), o);
+				} else {
+					next();
 				}
-			);
+			};
+		};
+
+		if (options.render) {
+
+			if (typeof options.render === 'string') {
+				//if a string resolve toa specific target
+				renderTask = grunt.config(options.render);
+			} else {
+				//else look for a render task in config with the same target
+				renderTask = grunt.config('render.' + this.target);
+			}
+
+			if (_.isObject(renderTask)) {
+				//enqueue dynamic template rendering
+				//middlewares
+				middleware.push(
+					render({
+						root: base,
+						//no layout by default
+						layout: renderTask.options.layout || false,
+						cache: false, // `false` for debug
+						helpers: {}
+					}),
+					req_render(renderTask.options)
+				);
+			}
+
 		}
 
 		middleware.push(

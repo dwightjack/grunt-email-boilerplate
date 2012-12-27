@@ -56,6 +56,8 @@ Sources are located in the `src` folder:
 	* `style.scss`: glue stylesheet, don't edit it directly
 * `images`: source images of your email
 * `css`: destination folder of compiled SCSS sources
+* `inc`: optional partials files (requires a `render` task to be set)
+* `data`: optional JSON files with variables (requires a `render` task to be set)
 
 ###Default Tasks
 
@@ -83,6 +85,8 @@ See `grunt.js` source for more options and customizations.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
 
 ## Release History
+v0.1.1
+	- Debugging and polishing 
 v0.1.0
 	- Initial release
 
