@@ -26,6 +26,8 @@
   },
   "keywords": ["email", "grunt", "premailer"],
   "dependencies": {
+    "jpegtran-bin": "0.1.x",
+    "optipng-bin": "0.1.x",
     "which": "1.0.5",
     "ejs": "0.8.3",
     "connect": "2.6.0",

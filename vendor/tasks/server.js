@@ -105,7 +105,7 @@ module.exports = function(grunt) {
 		if (this.flags.keepalive || options.keepalive) {
 			// This is now an async task. Since we don't store a handle to the "done"
 			// function, this task will never, ever, ever terminate. Have fun!
-			//this.async();
+			this.async();
 			grunt.log.write('Waiting forever...');
 		}
 	});

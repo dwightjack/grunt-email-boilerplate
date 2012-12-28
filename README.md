@@ -11,12 +11,11 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 
 ##Requirements
 
-* Node.js >= 0.8.11
+* Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * Grunt >=0.3.17 (`npm install grunt -g`)
-* Ruby >= 1.8.7
+* Ruby >= 1.8.7 ([installers][http://www.ruby-lang.org/en/downloads/])
 * Compass >= 0.12.2 (`gem install compass`)
 * Premailer >= 1.7.3 (`gem install premailer`)
-* jpegtran and OptiPNG
 
 ## Getting Started
 To install the boilerplate 
@@ -33,9 +32,9 @@ To install the boilerplate
 
 	`npm install -d`
 
-4. On Windows systems download [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/) executables and place them under the `vendor/bin` folder.
+4. On Windows systems you may need to replace the shipped jpegtran binary in `node_modules/jpegtran-bin/vendor/winXX` with the compiled binary from [jpegtran official website](http://jpegclub.org/jpegtran/).
 
-5. Run the development task `grunt dev` and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
+5. Run the development task `grunt dev` (`grunt.cmd dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
 
 ## Documentation
 
