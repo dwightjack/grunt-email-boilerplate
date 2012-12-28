@@ -85,9 +85,10 @@ See `grunt.js` source for more options and customizations.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
 
 ## Release History
-v0.1.1
+v0.1.1  
 	- Debugging and polishing 
-v0.1.0
+
+v0.1.0  
 	- Initial release
 
 ## License
