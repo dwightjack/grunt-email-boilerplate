@@ -24,11 +24,15 @@ module.exports = function( grunt ) {
 
         if( util.kindOf( source ) === 'string' && path.extname( source ).length === 0 && recursive ) {
             var filesList = [];
-            grunt.file.recurse(source,function(abspath){
-                if(abspath){
-                    filesList.push(abspath);
-                }
-            });
+
+            if (fs.existsSync(source)) {
+                grunt.file.recurse(source,function(abspath){
+                    if(abspath && fs.existsSync(abspath)){
+                        filesList.push(abspath);
+                    }
+                });
+            }
+
             files = filesList;
         } else {
             files = grunt.file.expandFiles(source);

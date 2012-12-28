@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 				options: {
 					force: true,
 					environment: 'production',
-					sass_dir: '../../<%= paths.src %>/scss',
+					sass_dir: '../<%= paths.src %>/scss',
 					config: path.normalize(__dirname + '/vendor/compass-config.rb')
 				}
 			}
