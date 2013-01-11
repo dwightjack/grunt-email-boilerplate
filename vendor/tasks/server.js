@@ -1,11 +1,10 @@
 /*
- * grunt custom server
+ * grunt custom server with ejs support
  * Based on grunt-contrib-server
  * http://gruntjs.com/
  *
- * @see https://github.com/fengmk2/connect-render
  *
- * Copyright (c) 2012 "Cowboy" Ben Alman, Marco "DWJ" Solazzi, contributors
+ * Copyright (c) 2013-2013 "Cowboy" Ben Alman, Marco "DWJ" Solazzi, contributors
  * Licensed under the MIT license.
  */
 /*jshint node:true */
@@ -18,7 +17,9 @@ module.exports = function(grunt) {
 
 	// External libs.
 	var connect = require('connect');
-	var render = require('connect-render');
+	var ejs = require('ejs');
+	var url = require('url');
+	var fs = require('fs');
 
 	var _ = grunt.utils._;
 
@@ -40,7 +41,7 @@ module.exports = function(grunt) {
 		var middleware = [];
 		var renderTask;
 
-		var req_render = function (options) {
+		/*var req_render = function (options) {
 			var o = _.defaults(options || {}, {
 				root: base
 			});
@@ -52,7 +53,7 @@ module.exports = function(grunt) {
 					next();
 				}
 			};
-		};
+		};*/
 
 		if (options.render) {
 
@@ -66,17 +67,32 @@ module.exports = function(grunt) {
 
 			if (_.isObject(renderTask)) {
 				//enqueue dynamic template rendering
-				//middlewares
-				middleware.push(
-					render({
-						root: base,
-						//no layout by default
-						layout: renderTask.options.layout || false,
-						cache: false, // `false` for debug
-						helpers: {}
-					}),
-					req_render(renderTask.options)
-				);
+				middleware.push(function (options) {
+					var o = _.defaults(options, { root: base });
+					return function (req, res, next) {
+
+						var file;
+
+						//only process html requests
+						if (!/\.html$/.test(req.url)) {
+							return next();
+						}
+						//ensure it's a proper path
+						o.root = grunt.template.process(o.root);
+						file = path.join(o.root, url.parse(req.url).pathname);
+						fs.readFile(file, 'utf8', function(err, str){
+							if (err) { return next(err); }
+							try {
+								str = ejs.render(str, _.extend({filename: file}, o));
+								res.setHeader('Content-Type', 'text/html');
+								res.setHeader('Content-Length', Buffer.byteLength(str));
+								res.end(str);
+							} catch (err) {
+								next(err);
+							}
+						});
+					};
+				}(renderTask.options || {}));
 			}
 
 		}

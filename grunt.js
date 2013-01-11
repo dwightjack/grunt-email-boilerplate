@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 				dest: '<%= paths.dist %>/email.html',
 				options: {
 					data: grunt.file.readJSON('data/data.json'),
-					root: '<%= paths.src %>' //used as partial basepath
+					root: '<%= paths.src %>' //used as include basepath
 				}
 			}
 		},

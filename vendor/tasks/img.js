@@ -4,7 +4,7 @@ module.exports = function( grunt ) {
 
   var fs = require('fs'),
     path = require('path'),
-    which = require('which'),
+    //which = require('which'),
     util = ('util' in grunt ? grunt.util : grunt.utils); //grunt 0.4 compat;
 
   var win32 = process.platform === 'win32';

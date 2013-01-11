@@ -18,6 +18,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * Premailer >= 1.7.3 (`gem install premailer`)
 
 ## Getting Started
+
 To install the boilerplate 
 
 1. install all dependencies
@@ -84,6 +85,12 @@ See `grunt.js` source for more options and customizations.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
 
 ## Release History
+v0.1.3  
+	- removed a couple of unneeded deps. Optimized `server` and `render` tasks
+
+v0.1.2  
+	- Added support for [ejs](https://github.com/visionmedia/ejs) templating
+
 v0.1.1  
 	- Debugging and polishing 
 
