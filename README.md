@@ -12,7 +12,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 ##Requirements
 
 * Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt >=0.3.17 (`npm install grunt -g`)
+* Grunt >=0.4.0 (`npm install grunt -g`)
 * Ruby >= 1.8.7 ([installers][http://www.ruby-lang.org/en/downloads/])
 * Compass >= 0.12.2 (`gem install compass`)
 * Premailer >= 1.7.3 (`gem install premailer`)
@@ -85,6 +85,9 @@ See `grunt.js` source for more options and customizations.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
 
 ## Release History
+v0.1.4  
+	- compatibility with grunt 0.4+
+
 v0.1.3  
 	- removed a couple of unneeded deps. Optimized `server` and `render` tasks
 

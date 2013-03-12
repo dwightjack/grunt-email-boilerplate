@@ -1,7 +1,7 @@
 /**
  * NodeMailer Task
  *
- * Copyright (c) 2012 Marco "DWJ" Solazzi
+ * Copyright (c) 2012-2013 Marco "DWJ" Solazzi
  * Licensed under the MIT license.
  */
 
@@ -9,24 +9,24 @@
 module.exports = function( grunt ) {
 	'use strict';
 
-	var _ = ('util' in grunt ? grunt.util : grunt.utils)._; //grunt 0.4 compat
+	var _ = grunt.util._;
 	var util = require('util');
 	var nodemailer = require('nodemailer');
 
 
 	grunt.registerMultiTask( 'send', 'Send e-mail with NodeMailer', function() {
 		var done = this.async(),
-				src = [].concat(this.file.src),
-				src_html = '',
-				src_txt = '',
-				options = _.defaults(this.data, {
-					transport: null,
-					recipients: [],
-					from: 'nodemailer <sender@example.com>',
-					subject: null
-				}),
-				transport,
-				subject;
+			src = [].concat(this.filesSrc),
+			src_html = '',
+			src_txt = '',
+			options = this.options({
+				transport: null,
+				recipients: [],
+				from: 'nodemailer <sender@example.com>',
+				subject: null
+			}),
+			transport,
+			subject;
 
 		if (_.isObject(options.transport)) {
 			transport = nodemailer.createTransport(options.transport.type, options.transport);
@@ -72,12 +72,12 @@ module.exports = function( grunt ) {
 		grunt.log.writeln('Sending emails to recipients: ' + to);
 
 		transport.sendMail(message, function(error) {
-				if(error){
-					grunt.fail.fatal('Error occured: ' + error.message);
-						return;
-				}
-				grunt.log.writeln(('Message sent successfully!').green);
-				done(true);
+			if(error){
+				grunt.fail.fatal('Error occured: ' + error.message);
+					return;
+			}
+			grunt.log.writeln(('Message sent successfully!').green);
+			done(true);
 		});
 
 

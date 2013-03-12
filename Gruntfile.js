@@ -3,7 +3,9 @@ module.exports = function(grunt) {
 	"use strict";
 
 	var path = require('path'),
-		_ = ('util' in grunt ? grunt.util : grunt.utils)._;
+		// ejs render middleware
+		ejs_render = require('./vendor/modules/ejs_render'),
+		_ = grunt.util._;
 
 	// Project configuration.
 	grunt.initConfig({
@@ -138,8 +140,8 @@ module.exports = function(grunt) {
 					"type": "SMTP",
 					"service": "Gmail",
 					"auth": {
-					    "user": "john.doe@gmail.com",
-					    "pass": "a.password!"
+						"user": "john.doe@gmail.com",
+						"pass": "a.password!"
 					}
 				},*/
 				// HTML and TXT email
@@ -162,43 +164,59 @@ module.exports = function(grunt) {
 		 */
 		watch: {
 			files: ['src/scss/**/*.scss'],
-			tasks: 'compass:dev'
+			tasks: ['compass:dev']
 		},
 
 		/**
 		 * Server Tasks (used internally)
 		 * ===============================
 		 */
-		server: {
+		connect: {
 
 			dev: {
-				port: 8000,
-				base: '<%= paths.src %>',
-				//dinamically render EJS tags
-				//uses the render:dist `options` prop for configuration
-				render: 'render.dist'
+				options: {
+					port: 8000,
+					base: '<%= paths.src %>',
+					//custom middlewares
+					middleware: function (connect, options) {
+						return [
+							//dinamically render EJS tags
+							//uses the render:dist `options` prop for configuration
+							ejs_render(grunt, grunt.config.get('render.dist') || options),
+							// Serve static files.
+							connect.static(options.base),
+							// Make empty directories browsable.
+							connect.directory(options.base)
+						];
+					}
+				}
 			},
 
 			dist: {
-				port: 8000,
-				base: '<%= paths.dist %>',
-				//keep the server on
-				keepalive: true
+				options: {
+					port: 8000,
+					base: '<%= paths.dist %>',
+					//keep the server on
+					keepalive: true
+				}
 			}
 
 		  }
 
 	});
 
+	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
 	grunt.registerTask('default', 'compass:dist');
 
-	grunt.registerTask('dev', 'server:dev watch');
+	grunt.registerTask('dev', ['connect:dev', 'watch']);
 
-	grunt.registerTask('dist', 'clean:dist img:dist compass:dist render:dist premailer:dist');
+	grunt.registerTask('dist', ['clean:dist', 'img:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
 
-	grunt.registerTask('test', 'dist send:dist server:dist');
+	grunt.registerTask('test', ['dist', 'send:dist', 'connect:dist']);
 
 
 };
