@@ -10,16 +10,14 @@ module.exports = function(grunt) {
 
   "use strict";
 
-  var ejs = require('ejs');
-  var path = require('path');
-  var fs = require('fs');
-
-  var _ = grunt.utils._;
+  var ejs = require('ejs'),
+	path = require('path'),
+	_ = grunt.util._;
 
 	function render (filepath, options) {
 		var src = '';
 
-		if (fs.existsSync(filepath)) {
+		if (grunt.file.exists(filepath)) {
 			src = grunt.file.read(filepath);
 			return ejs.render(src, options || null);
 		} else {
@@ -30,7 +28,7 @@ module.exports = function(grunt) {
 
 
   grunt.registerMultiTask('render', 'Renders an ejs template to palin HTML', function() {
-	var options = _.defaults(this.data.options || {}, {
+	var options = this.options({
 	  filename: this.file.src
 	});
 	var src = render(this.file.src, options);

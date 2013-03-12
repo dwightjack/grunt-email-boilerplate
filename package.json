@@ -31,13 +31,14 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "jpegtran-bin": "0.1.x",
-    "optipng-bin": "0.1.x",
-    "ejs": "0.8.3",
-    "connect": "2.6.0",
-    "nodemailer": "0.3.28",
+    "ejs": "~0.8.3",
+    "nodemailer": "~0.3.28",
     "grunt": "~0.4.0",
     "grunt-contrib-watch": "~0.3.1",
-    "grunt-contrib-connect": "~0.2.0"
+    "grunt-contrib-connect": "~0.2.0",
+    "grunt-contrib-copy": "~0.4.0",
+    "grunt-contrib-imagemin": "~0.1.2",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-compass": "~0.1.3"
   }
 }

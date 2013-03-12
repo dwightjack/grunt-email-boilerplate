@@ -40,6 +40,14 @@ module.exports = function(grunt) {
 		},
 
 
+		copy: {
+			gif: {
+				src: ['<%= paths.src %>/<%=paths.images %>/**/*.gif'],
+				dest: '<%= paths.dist %>/<%=paths.images %>'
+			}
+		},
+
+
 
 		/**
 		 * SCSS Compilation Tasks
@@ -48,24 +56,22 @@ module.exports = function(grunt) {
 		compass: {
 
 			dev: {
-				//set the parent folder of scss files
-				project_path : '<%= paths.src %>',
 				options: {
-					//accepts any compass command line option
-					//replace mid dashes `-` with underscores `_`
-					//ie: --sass-dir => sass_dir
-					//see http://compass-style.org/help/tutorials/command-line/
+					//set the parent folder of scss files
+					basePath : '<%= paths.src %>',
+					//accepts some compass command line option
+					//see https://github.com/gruntjs/grunt-contrib-compass
 					config: path.normalize(__dirname + '/vendor/compass-config.rb')
 				}
 			},
 
 			dist: {
-				project_path : '<%= paths.dist %>',
 				options: {
+					basePath : '<%= paths.dist %>',
 					force: true,
 					environment: 'production',
-					sass_dir: '../<%= paths.src %>/scss',
-					config: path.normalize(__dirname + '/vendor/compass-config.rb')
+					config: path.normalize(__dirname + '/vendor/compass-config.rb'),
+					sassDir: '../<%= paths.src %>/scss'
 				}
 			}
 		},
@@ -113,13 +119,18 @@ module.exports = function(grunt) {
 		 * Images Optimization Tasks
 		 * ===============================
 		 */
-		img: {
+		imagemin: {
 
 			dist: {
-				//source images folder
-				src: '<%= paths.src %>/<%=paths.images %>',
-				//optimized images folder
-				dest: '<%= paths.dist %>/<%=paths.images %>'
+				options: {
+					optimizationLevel: 3
+				},
+				files: {
+					//source images folder
+					src: '<%= paths.src %>/<%=paths.images %>',
+					//optimized images folder
+					dest: '<%= paths.dist %>/<%=paths.images %>'
+				}
 			}
 		},
 
@@ -207,6 +218,10 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-imagemin');
+	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-compass');
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
@@ -214,7 +229,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', ['connect:dev', 'watch']);
 
-	grunt.registerTask('dist', ['clean:dist', 'img:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
+	grunt.registerTask('dist', ['clean:dist', 'copy', 'img:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
 
 	grunt.registerTask('test', ['dist', 'send:dist', 'connect:dist']);
 
