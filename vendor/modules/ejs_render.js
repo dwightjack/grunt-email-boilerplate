@@ -12,7 +12,6 @@ function ejs_render (grunt, options) {
 
 	return function (req, res, next) {
 
-
 		var file;
 
 		//only process html requests

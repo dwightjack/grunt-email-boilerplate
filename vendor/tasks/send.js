@@ -74,7 +74,7 @@ module.exports = function( grunt ) {
 		transport.sendMail(message, function(error) {
 			if(error){
 				grunt.fail.fatal('Error occured: ' + error.message);
-					return;
+				return;
 			}
 			grunt.log.writeln(('Message sent successfully!').green);
 			done(true);

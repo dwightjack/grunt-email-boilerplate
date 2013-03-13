@@ -12,10 +12,10 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 ##Requirements
 
 * Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt >=0.4.0 (`npm install grunt -g`)
+* Grunt >=0.4.0 (`npm install grunt-cli -g`)
 * Ruby >= 1.8.7 ([installers][http://www.ruby-lang.org/en/downloads/])
 * Compass >= 0.12.2 (`gem install compass`)
-* Premailer >= 1.7.3 (`gem install premailer`)
+* Premailer >= 1.7.3 (`gem install premailer` and, most of the time, `gem install hpricot`)
 
 ## Getting Started
 
@@ -31,11 +31,9 @@ To install the boilerplate
 	
 	`cd grunt-email-boilerplate`
 
-	`npm install -d`
+	`npm install`
 
-4. On Windows systems you may need to replace the shipped jpegtran binary in `node_modules/jpegtran-bin/vendor/winXX` with the compiled binary from [jpegtran official website](http://jpegclub.org/jpegtran/).
-
-5. Run the development task `grunt dev` (`grunt.cmd dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
+4. Run the development task `grunt dev` (`grunt.cmd dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
 
 ## Documentation
 
@@ -79,14 +77,14 @@ Extends `dist` task by sending the compiled email to any configured recipient an
 
 ###Tasks Customization
 
-See `grunt.js` source for more options and customizations.
+See `Gruntfile.js` source for more options and customizations.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
 
 ## Release History
 v0.1.4  
-	- compatibility with grunt 0.4+
+	- compatibility with grunt 0.4+ and contrib plugins
 
 v0.1.3  
 	- removed a couple of unneeded deps. Optimized `server` and `render` tasks
@@ -101,6 +99,6 @@ v0.1.0
 	- Initial release
 
 ## License
-Copyright (c) 2012 Marco Solazzi
+Copyright (c) 2012-2013 Marco Solazzi
 Licensed under the MIT license.
 

@@ -8,12 +8,11 @@
 module.exports = function( grunt ) {
   'use strict';
 
-  var util = ('util' in grunt ? grunt.util : grunt.utils); //grunt 0.4 compat
-  var _ = util._;
-  var command = 'ruby' + (process.platform === 'win32' ? '.exe' : '');
-  var template = grunt.template;
-  var fs = require('fs');
-  var path = require('path');
+  var util = grunt.util,
+      _ = util._,
+      command = 'ruby' + (process.platform === 'win32' ? '.exe' : ''),
+      template = grunt.template,
+      path = require('path');
 
   function optsToArgs( opts ) {
     var args = [];
@@ -21,7 +20,9 @@ module.exports = function( grunt ) {
     Object.keys( opts ).forEach(function( el ) {
       var val = opts[ el ];
 
-      el = el.replace( /_/g, '-' );
+      el = el.replace(/[A-Z]/g, function(match) {
+        return '-' + match.toLowerCase();
+      });
 
       if ( val === true ) {
         args.push( '--' + el );
@@ -42,33 +43,52 @@ module.exports = function( grunt ) {
   }
 
   grunt.registerMultiTask( 'premailer', 'Compass task', function() {
-    var done = this.async();
     var args = ['vendor/premailer-parser.rb'].concat(optsToArgs(this.data.options));
-    var src = grunt.file.read(this.file.src);
-    var dest_html = this.file.dest;
-    var dest_txt = dest_html.replace(/\.html?$/, '.txt');
-    var tmpFile = path.join( path.dirname(dest_html), '_tmp_premailer.html' );
 
-    //copy content to the temp file
-    grunt.file.write(tmpFile, src);
+    grunt.util.async.forEach(this.files, function (file, next) {
 
+      var src = file.src.filter(function(filepath) {
+        // Remove nonexistent files (it's up to you to filter or warn here).
+        if (!grunt.file.exists(filepath)) {
+          grunt.log.warn('Source file "' + filepath + '" not found.');
+          return false;
+        } else {
+          return true;
+        }
+      }).map(function(filepath) {
+        // Read and return the file's source.
+        return grunt.file.read(filepath);
+      }).join('\n');
 
-    args.push('--file-in', tmpFile, '--file-out-html', dest_html, '--file-out-txt', dest_txt);
-
-    var premailer = util.spawn({
-      cmd: command,
-      args: args
-    }, function( err, result, code ) {
-      if ( /not found/.test( err ) ) {
-        grunt.fail.fatal('You need to have Premailer installed.');
+      if (_.isEmpty(src)) {
+        grunt.fail.fatal('Nothing to parse');
       }
-      //remove the tmp file
-      fs.unlinkSync(tmpFile);
-      done( code === 0 );
-    });
 
-    premailer.stdout.pipe( process.stdout );
-    premailer.stderr.pipe( process.stderr );
+      var dest_html = file.dest;
+      var dest_txt = dest_html.replace(/\.html?$/, '.txt');
+      var tmpFile = path.join( path.dirname(dest_html), '_tmp_premailer.html' );
+      var batchAgs = args.concat(['--file-in', tmpFile, '--file-out-html', dest_html, '--file-out-txt', dest_txt]);
+      var premailer;
+      //copy content to the temp file
+      grunt.file.write(tmpFile, src);
+
+      premailer = util.spawn({
+          cmd: command,
+          args: batchAgs
+      }, function( err, result, code ) {
+        if ( err ) {
+          grunt.fail.fatal(err);
+        }
+        //remove the tmp file
+        grunt.file.delete(tmpFile);
+
+        premailer.stdout.pipe( process.stdout );
+        premailer.stderr.pipe( process.stderr );
+        next( code === 0 );
+      });
+
+    }.bind(this), this.async());
+
 
   });
 };

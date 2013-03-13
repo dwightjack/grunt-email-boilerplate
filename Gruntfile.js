@@ -42,7 +42,9 @@ module.exports = function(grunt) {
 
 		copy: {
 			gif: {
-				src: ['<%= paths.src %>/<%=paths.images %>/**/*.gif'],
+				expand: true,
+				cwd: '<%= paths.src %>/<%=paths.images %>',
+				src: ['**/*.gif'],
 				dest: '<%= paths.dist %>/<%=paths.images %>'
 			}
 		},
@@ -105,10 +107,10 @@ module.exports = function(grunt) {
 				dest: '<%= paths.dist %>/email.html',
 				options: {
 					//accepts any compass command line option
-					//replace mid dashes `-` with underscores `_`
-					//ie: --base-url => base_url
+					//replace mid dashes `-` with camelCase
+					//ie: --base-url => baseUrl
 					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
-					base_url: 'http://localhost:8000/'
+					baseUrl: 'http://localhost:8000/'
 				}
 			}
 		},
@@ -125,12 +127,9 @@ module.exports = function(grunt) {
 				options: {
 					optimizationLevel: 3
 				},
-				files: {
-					//source images folder
-					src: '<%= paths.src %>/<%=paths.images %>',
-					//optimized images folder
-					dest: '<%= paths.dist %>/<%=paths.images %>'
-				}
+				src: ['<%= paths.src %>/<%=paths.images %>/**/*'],
+				//optimized images folder
+				dest: '<%= paths.dist %>/<%=paths.images %>'
 			}
 		},
 
@@ -142,28 +141,33 @@ module.exports = function(grunt) {
 		send: {
 
 			dist: {
-				/**
-				 * Defaults to sendmail
-				 * Here follows a Gmail SMTP exeample trasport
-				 * @see https://github.com/andris9/Nodemailer
-				 */
-				/*transport: {
-					"type": "SMTP",
-					"service": "Gmail",
-					"auth": {
-						"user": "john.doe@gmail.com",
-						"pass": "a.password!"
-					}
-				},*/
-				// HTML and TXT email
+
 				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
-				// A collection of recipients
-				recipients: [
-					{
-						email: 'jane.doe@gmail.com',
-						name: 'Jane Doe'
-					}
-				]
+
+				options: {
+
+					/**
+					 * Defaults to sendmail
+					 * Here follows a Gmail SMTP exeample trasport
+					 * @see https://github.com/andris9/Nodemailer
+					 */
+					/*transport: {
+						"type": "SMTP",
+						"service": "Gmail",
+						"auth": {
+						    "user": "john.doe@gmail.com",
+						    "pass": "password"
+						}
+					},*/
+					// HTML and TXT email
+					// A collection of recipients
+					recipients: [
+						{
+							email: 'jane.doe@gmail.com',
+							name: 'Jane Doe'
+						}
+					]
+				}
 			}
 
 		},
@@ -193,7 +197,7 @@ module.exports = function(grunt) {
 						return [
 							//dinamically render EJS tags
 							//uses the render:dist `options` prop for configuration
-							ejs_render(grunt, grunt.config.get('render.dist') || options),
+							ejs_render(grunt, (grunt.config.get('render.dist') || {}).options || options),
 							// Serve static files.
 							connect.static(options.base),
 							// Make empty directories browsable.
@@ -229,7 +233,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', ['connect:dev', 'watch']);
 
-	grunt.registerTask('dist', ['clean:dist', 'copy', 'img:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
+	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
 
 	grunt.registerTask('test', ['dist', 'send:dist', 'connect:dist']);
 
