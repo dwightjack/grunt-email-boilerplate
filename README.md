@@ -7,13 +7,14 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
+* HTML templating with [EJS](https://github.com/visionmedia/ejs)
 * test email delivery with [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
 
 * Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * Grunt >=0.4.0 (`npm install grunt-cli -g`)
-* Ruby >= 1.8.7 ([installers][http://www.ruby-lang.org/en/downloads/])
+* Ruby >= 1.8.7 ([installers](http://www.ruby-lang.org/en/downloads/))
 * Compass >= 0.12.2 (`gem install compass`)
 * Premailer >= 1.7.3 (`gem install premailer` and, most of the time, `gem install hpricot`)
 
@@ -80,7 +81,7 @@ Extends `dist` task by sending the compiled email to any configured recipient an
 See `Gruntfile.js` source for more options and customizations.
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
 v0.1.4  

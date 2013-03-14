@@ -17,12 +17,12 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/dwightjack/grunt-email-boilerplate/blob/master/LICENSE-MIT"
+      "url": "http://github.com/dwightjack/grunt-email-boilerplate/blob/master/MIT_LICENSE.txt"
     }
   ],
   "main": "Gruntfile.js",
   "engines": {
-    "node": ">= 0.8.11"
+    "node": "~0.8.11"
   },
   "keywords": [
     "email",

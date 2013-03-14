@@ -1,7 +1,7 @@
 /**
  * Premailer Task
  *
- * Copyright (c) 2012 Marco "DWJ" Solazzi
+ * Copyright (c) 2013 Marco "DWJ" Solazzi
  * Licensed under the MIT license.
  */
 /*jshint node:true */
