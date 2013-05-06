@@ -40,12 +40,18 @@ module.exports = function(grunt) {
 		},
 
 
+		/**
+		 * Copy gif files Tasks (used internally)
+		 * ===============================
+		 */
 		copy: {
 			gif: {
-				expand: true,
-				cwd: '<%= paths.src %>/<%=paths.images %>',
-				src: ['**/*.gif'],
-				dest: '<%= paths.dist %>/<%=paths.images %>'
+				files: [{
+					expand: true,
+					cwd: '<%= paths.src %>/<%=paths.images %>',
+					src: ['**/*.gif'],
+					dest: '<%= paths.dist %>/<%=paths.images %>'
+				}]
 			}
 		},
 
@@ -127,9 +133,12 @@ module.exports = function(grunt) {
 				options: {
 					optimizationLevel: 3
 				},
-				src: ['<%= paths.src %>/<%=paths.images %>/**/*'],
-				//optimized images folder
-				dest: '<%= paths.dist %>/<%=paths.images %>'
+				files: [{
+					expand: true,
+					cwd: '<%= paths.src %>/<%=paths.images %>',
+					src: ['**/*'],
+					dest: '<%= paths.dist %>/<%=paths.images %>'
+				}]
 			}
 		},
 
