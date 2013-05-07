@@ -8,6 +8,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs)
+* Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
 * test email delivery with [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
@@ -34,7 +35,7 @@ To install the boilerplate
 
 	`npm install`
 
-4. Run the development task `grunt dev` (`grunt.cmd dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
+4. Run the development task `grunt dev` (`grunt dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
 
 ## Documentation
 
@@ -84,6 +85,9 @@ See `Gruntfile.js` source for more options and customizations.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.2  
+	- `ejs` templates are now statically rendered in development stage by the `watch` task. Added `open` and `devcode` tasks. Fixed some issues with the `imagemin` task.
+
 v0.1.4  
 	- compatibility with grunt 0.4+ and contrib plugins
 
