@@ -14,7 +14,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 ##Requirements
 
 * Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt >=0.4.0 (`npm install grunt-cli -g`)
+* Grunt-cli >= 0.1.7 and Grunt >=0.4.1 (`npm install grunt-cli -g`)
 * Ruby >= 1.8.7 ([installers](http://www.ruby-lang.org/en/downloads/))
 * Compass >= 0.12.2 (`gem install compass`)
 * Premailer >= 1.7.3 (`gem install premailer` and, most of the time, `gem install hpricot`)
@@ -80,6 +80,25 @@ Extends `dist` task by sending the compiled email to any configured recipient an
 ###Tasks Customization
 
 See `Gruntfile.js` source for more options and customizations.
+
+###Tips and Tricks
+
+1) **Cannot connect from a remote device to localhost:8000**
+
+To connect to `http://localhost:8000` from a remote device add a `hostname: null` parameter to the `connect` subtasks (see https://github.com/gruntjs/grunt-contrib-connect/pull/19):
+
+```javascript
+connect: {
+
+	dev: {
+		options: {
+			hostname: null,
+			port: 8000,
+			base: '<%= paths.src %>'
+		}
+	},
+	...
+```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).

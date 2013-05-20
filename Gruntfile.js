@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 			dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
 			//sources
 			src: 'src',
-
+			//main email file
 			email: 'email.html'
 		},
 
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
 					//replace mid dashes `-` with camelCase
 					//ie: --base-url => baseUrl
 					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
-					baseUrl: 'http://localhost:8000/'
+					baseUrl: '<%= paths.distDomain %>'
 				}
 			}
 		},
@@ -207,8 +207,8 @@ module.exports = function(grunt) {
 						"type": "SMTP",
 						"service": "Gmail",
 						"auth": {
-						    "user": "john.doe@gmail.com",
-						    "pass": "password"
+							"user": "john.doe@gmail.com",
+							"pass": "password"
 						}
 					},*/
 					// HTML and TXT email
