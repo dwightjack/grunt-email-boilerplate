@@ -7,7 +7,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
-* HTML templating with [EJS](https://github.com/visionmedia/ejs)
+* HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
 * Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
 * test email delivery with [NodeMailer](https://github.com/andris9/Nodemailer)
 
@@ -104,6 +104,9 @@ connect: {
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.2.1  
+	- render task moved to [external grunt plugin](https://github.com/dwightjack/grunt-ejs-render)
+
 v0.2  
 	- `ejs` templates are now statically rendered in development stage by the `watch` task. Added `open` and `devcode` tasks. Fixed some issues with the `imagemin` task.
 

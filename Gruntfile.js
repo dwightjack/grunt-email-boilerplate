@@ -90,21 +90,16 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		render: {
+			options: {
+				data: 'data/data.json',
+			},
 			dev: {
 				src: '<%= paths.src %>/<%= paths.email %>',
-				dest: '<%= paths.src %>/_tmp.<%= paths.email %>',
-				options: {
-					data: grunt.file.readJSON('data/data.json'),
-					root: '<%= paths.src %>' //used as include basepath
-				}
+				dest: '<%= paths.src %>/_tmp.<%= paths.email %>'
 			},
 			dist: {
 				src: '<%= paths.src %>/<%= paths.email %>',
-				dest: '<%= paths.dist %>/<%= paths.email %>',
-				options: {
-					data: grunt.file.readJSON('data/data.json'),
-					root: '<%= paths.src %>' //used as include basepath
-				}
+				dest: '<%= paths.dist %>/<%= paths.email %>'
 			}
 		},
 
@@ -277,13 +272,16 @@ module.exports = function(grunt) {
 
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-imagemin');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-compass');
-	grunt.loadNpmTasks('grunt-open');
+	[
+		'grunt-contrib-connect',
+		'grunt-contrib-watch',
+		'grunt-contrib-copy',
+		'grunt-contrib-imagemin',
+		'grunt-contrib-clean',
+		'grunt-contrib-compass',
+		'grunt-open',
+		'grunt-ejs-render'
+	].forEach(grunt.loadNpmTasks);
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
