@@ -166,6 +166,7 @@ pip-log.txt
 
 # custom
 dist*/
+_tmp.*
 smtptransp.json
 node_modules
 .sass-cache

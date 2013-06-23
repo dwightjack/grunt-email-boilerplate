@@ -3,8 +3,6 @@ module.exports = function(grunt) {
 	"use strict";
 
 	var path = require('path'),
-		// ejs render middleware
-		ejs_render = require('./vendor/modules/ejs_render'),
 		_ = grunt.util._;
 
 	// Project configuration.
@@ -27,7 +25,9 @@ module.exports = function(grunt) {
 			//where to store built files
 			dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
 			//sources
-			src: 'src'
+			src: 'src',
+			//main email file
+			email: 'email.html'
 		},
 
 
@@ -90,12 +90,50 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		render: {
+			options: {
+				data: 'data/data.json',
+			},
+			dev: {
+				src: '<%= paths.src %>/<%= paths.email %>',
+				dest: '<%= paths.src %>/_tmp.<%= paths.email %>'
+			},
 			dist: {
-				src: '<%= paths.src %>/email.html',
-				dest: '<%= paths.dist %>/email.html',
+				src: '<%= paths.src %>/<%= paths.email %>',
+				dest: '<%= paths.dist %>/<%= paths.email %>'
+			}
+		},
+
+		/**
+		 * Environment Related Task
+		 * ===============================
+		 */
+		devcode: {
+			options: {
+				html: true, // html files parsing?
+				js: false, // javascript files parsing?
+				css: false, // css files parsing?
+				clean: true, // removes devcode comments even if code was not removed
+				block: {
+					open: 'devcode', // with this string we open a block of code
+					close: 'endcode' // with this string we close a block of code
+				},
+				dest: 'dev' // default destination which overwrittes environment variable
+			},
+			dev: { // settings for task used with 'devcode:dev'
 				options: {
-					data: grunt.file.readJSON('data/data.json'),
-					root: '<%= paths.src %>' //used as include basepath
+					source: '<%= paths.src %>/',
+					dest: '<%= paths.src %>/',
+					env: 'development',
+					filter: function (filepath) {
+						return path.basename(filepath) !== grunt.template.process('<%= paths.email %>');
+					}
+				}
+			},
+			dist: { // settings for task used with 'devcode:dist'
+				options: {
+					source: '<%= paths.dist %>/',
+					dest: '<%= paths.dist %>/',
+					env: 'production'
 				}
 			}
 		},
@@ -108,15 +146,15 @@ module.exports = function(grunt) {
 
 			dist: {
 				//source file path
-				src: '<%= paths.dist %>/email.html',
+				src: '<%= paths.dist %>/<%= paths.email %>',
 				// overwrite source file
-				dest: '<%= paths.dist %>/email.html',
+				dest: '<%= paths.dist %>/<%= paths.email %>',
 				options: {
 					//accepts any compass command line option
 					//replace mid dashes `-` with camelCase
 					//ie: --base-url => baseUrl
 					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
-					baseUrl: 'http://localhost:8000/'
+					baseUrl: '<%= paths.distDomain %>'
 				}
 			}
 		},
@@ -151,7 +189,7 @@ module.exports = function(grunt) {
 
 			dist: {
 
-				src: ['<%= paths.dist %>/email.html', '<%= paths.dist %>/email.txt'],
+				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/email.txt'],
 
 				options: {
 
@@ -164,8 +202,8 @@ module.exports = function(grunt) {
 						"type": "SMTP",
 						"service": "Gmail",
 						"auth": {
-						    "user": "john.doe@gmail.com",
-						    "pass": "password"
+							"user": "john.doe@gmail.com",
+							"pass": "password"
 						}
 					},*/
 					// HTML and TXT email
@@ -187,8 +225,25 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		watch: {
+			compass: {
 			files: ['src/scss/**/*.scss'],
 			tasks: ['compass:dev']
+		},
+			html: {
+				files: ['src/email.html', 'src/_inc/**/*.html'],
+				tasks: ['render:dev', 'devcode:dev']
+			}
+		},
+
+
+		/**
+		 * Open Browser (used internally)
+		 * ===============================
+		 */
+		open: {
+			dev : {
+				path: 'http://localhost:8000/_tmp.<%= paths.email %>'
+			}
 		},
 
 		/**
@@ -200,19 +255,7 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					port: 8000,
-					base: '<%= paths.src %>',
-					//custom middlewares
-					middleware: function (connect, options) {
-						return [
-							//dinamically render EJS tags
-							//uses the render:dist `options` prop for configuration
-							ejs_render(grunt, (grunt.config.get('render.dist') || {}).options || options),
-							// Serve static files.
-							connect.static(options.base),
-							// Make empty directories browsable.
-							connect.directory(options.base)
-						];
-					}
+					base: '<%= paths.src %>'
 				}
 			},
 
@@ -229,20 +272,24 @@ module.exports = function(grunt) {
 
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-imagemin');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-compass');
+	[
+		'grunt-contrib-connect',
+		'grunt-contrib-watch',
+		'grunt-contrib-copy',
+		'grunt-contrib-imagemin',
+		'grunt-contrib-clean',
+		'grunt-contrib-compass',
+		'grunt-open',
+		'grunt-ejs-render'
+	].forEach(grunt.loadNpmTasks);
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
 	grunt.registerTask('default', 'compass:dist');
 
-	grunt.registerTask('dev', ['connect:dev', 'watch']);
+	grunt.registerTask('dev', ['render:dev', 'devcode:dev', 'connect:dev', 'open:dev', 'watch']);
 
-	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'premailer:dist' ] );
+	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'devcode:dist', 'premailer:dist'] );
 
 	grunt.registerTask('test', ['dist', 'send:dist', 'connect:dist']);
 

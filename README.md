@@ -7,13 +7,14 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
-* HTML templating with [EJS](https://github.com/visionmedia/ejs)
+* HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
+* Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
 * test email delivery with [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
 
 * Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt >=0.4.0 (`npm install grunt-cli -g`)
+* Grunt-cli >= 0.1.7 and Grunt >=0.4.1 (`npm install grunt-cli -g`)
 * Ruby >= 1.8.7 ([installers](http://www.ruby-lang.org/en/downloads/))
 * Compass >= 0.12.2 (`gem install compass`)
 * Premailer >= 1.7.3 (`gem install premailer` and, most of the time, `gem install hpricot`)
@@ -34,7 +35,7 @@ To install the boilerplate
 
 	`npm install`
 
-4. Run the development task `grunt dev` (`grunt.cmd dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). Default preview URL is `http://localhost:8000`.
+4. Run the development task `grunt dev` (`grunt dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
 
 ## Documentation
 
@@ -80,10 +81,35 @@ Extends `dist` task by sending the compiled email to any configured recipient an
 
 See `Gruntfile.js` source for more options and customizations.
 
+###Tips and Tricks
+
+1) **Cannot connect from a remote device to localhost:8000**
+
+To connect to `http://localhost:8000` from a remote device add a `hostname: null` parameter to the `connect` subtasks (see https://github.com/gruntjs/grunt-contrib-connect/pull/19):
+
+```javascript
+connect: {
+
+	dev: {
+		options: {
+			hostname: null,
+			port: 8000,
+			base: '<%= paths.src %>'
+		}
+	},
+	...
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.2.1  
+	- render task moved to [external grunt plugin](https://github.com/dwightjack/grunt-ejs-render)
+
+v0.2  
+	- `ejs` templates are now statically rendered in development stage by the `watch` task. Added `open` and `devcode` tasks. Fixed some issues with the `imagemin` task.
+
 v0.1.4  
 	- compatibility with grunt 0.4+ and contrib plugins
 
