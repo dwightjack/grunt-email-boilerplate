@@ -43,7 +43,7 @@ module.exports = function( grunt ) {
   }
 
   grunt.registerMultiTask( 'premailer', 'Compass task', function() {
-    var args = ['vendor/premailer-parser.rb'].concat(optsToArgs(this.data.options));
+    var args = ['vendor/premailer-parser.rb'].concat(optsToArgs(this.options()));
 
     grunt.util.async.forEach(this.files, function (file, next) {
 

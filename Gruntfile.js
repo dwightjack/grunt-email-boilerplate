@@ -27,7 +27,9 @@ module.exports = function(grunt) {
 			//sources
 			src: 'src',
 			//main email file
-			email: 'email.html'
+			email: 'email.html',
+			//enter here yout production domain
+			distDomain: 'http://www.mydomain.com/'
 		},
 
 
