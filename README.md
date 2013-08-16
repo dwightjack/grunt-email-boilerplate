@@ -35,7 +35,7 @@ To install the boilerplate
 
 	`npm install`
 
-4. Run the development task `grunt dev` (`grunt dev` on Windows prompt) and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
+4. Run the development task `grunt dev` and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
 
 ## Documentation
 
@@ -75,7 +75,8 @@ Images are optimized with jpegtran and OptiPNG.
 
 **`test` Tasks**
 
-Extends `dist` task by sending the compiled email to any configured recipient and starts a static server at `http://localhost:8000` pointing to the `dist{YYYYMMDD}` folder.
+Extends `dev` and `dist` tasks by sending the compiled email to any configured recipient. In order to use this task you have to provide a target environment by running either `test:dev` or `test:dist`.  
+To customize email transports and recipients refer to the `send` tasks in `Gruntfile.js`.
 
 ###Tasks Customization
 
@@ -83,27 +84,17 @@ See `Gruntfile.js` source for more options and customizations.
 
 ###Tips and Tricks
 
-1) **Cannot connect from a remote device to localhost:8000**
+1) **Connecting from a machine other than localhost**
 
-To connect to `http://localhost:8000` from a remote device add a `hostname: null` parameter to the `connect` subtasks (see https://github.com/gruntjs/grunt-contrib-connect/pull/19):
-
-```javascript
-connect: {
-
-	dev: {
-		options: {
-			hostname: null,
-			port: 8000,
-			base: '<%= paths.src %>'
-		}
-	},
-	...
-```
+By default tasks refer to `http://localhost:8000` as the test URL, anyway you may connect to the test server by pointing to its IP (e.g.: `http://192.168.0.10:8000`) or to any other registered alias.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.2.2  
+	- better test handling. Updated dependencies.
+
 v0.2.1  
 	- render task moved to [external grunt plugin](https://github.com/dwightjack/grunt-ejs-render)
 

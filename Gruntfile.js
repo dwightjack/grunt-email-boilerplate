@@ -29,7 +29,9 @@ module.exports = function(grunt) {
 			//main email file
 			email: 'email.html',
 			//enter here yout production domain
-			distDomain: 'http://www.mydomain.com/'
+			distDomain: 'http://www.mydomain.com/',
+			//this is the default development domain
+			devDomain: 'http://localhost:8000/'
 		},
 
 
@@ -158,6 +160,16 @@ module.exports = function(grunt) {
 					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
 					baseUrl: '<%= paths.distDomain %>'
 				}
+			},
+
+			dev: {
+				src: '<%= paths.src %>/_tmp.<%= paths.email %>',
+				// overwrite source file
+				dest: '<%= paths.src %>/_tmp.<%= paths.email %>',
+
+				options: {
+					baseUrl: '<%= paths.devDomain %>'
+				}
 			}
 		},
 
@@ -189,34 +201,37 @@ module.exports = function(grunt) {
 		 */
 		send: {
 
+			options: {
+
+				/**
+				 * Defaults to sendmail
+				 * Here follows a Gmail SMTP exeample trasport
+				 * @see https://github.com/andris9/Nodemailer
+				 */
+				/*transport: {
+					"type": "SMTP",
+					"service": "Gmail",
+					"auth": {
+						"user": "john.doe@gmail.com",
+						"pass": "password"
+					}
+				},
+				// HTML and TXT email
+				// A collection of recipients
+				recipients: [
+					{
+						email: 'jane.doe@gmail.com',
+						name: 'Jane Doe'
+					}
+				]*/
+			},
+
 			dist: {
+				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/email.txt']
+			},
 
-				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/email.txt'],
-
-				options: {
-
-					/**
-					 * Defaults to sendmail
-					 * Here follows a Gmail SMTP exeample trasport
-					 * @see https://github.com/andris9/Nodemailer
-					 */
-					/*transport: {
-						"type": "SMTP",
-						"service": "Gmail",
-						"auth": {
-							"user": "john.doe@gmail.com",
-							"pass": "password"
-						}
-					},*/
-					// HTML and TXT email
-					// A collection of recipients
-					recipients: [
-						{
-							email: 'jane.doe@gmail.com',
-							name: 'Jane Doe'
-						}
-					]
-				}
+			dev: {
+				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.email.txt']
 			}
 
 		},
@@ -228,9 +243,9 @@ module.exports = function(grunt) {
 		 */
 		watch: {
 			compass: {
-			files: ['src/scss/**/*.scss'],
-			tasks: ['compass:dev']
-		},
+				files: ['src/scss/**/*.scss'],
+				tasks: ['compass:dev']
+			},
 			html: {
 				files: ['src/email.html', 'src/_inc/**/*.html'],
 				tasks: ['render:dev', 'devcode:dev']
@@ -244,7 +259,7 @@ module.exports = function(grunt) {
 		 */
 		open: {
 			dev : {
-				path: 'http://localhost:8000/_tmp.<%= paths.email %>'
+				path: '<%= paths.devDomain %>_tmp.<%= paths.email %>'
 			}
 		},
 
@@ -254,16 +269,27 @@ module.exports = function(grunt) {
 		 */
 		connect: {
 
+			options: {
+				hostname: '*',
+				port: 8000
+			},
+
 			dev: {
 				options: {
-					port: 8000,
 					base: '<%= paths.src %>'
+				}
+			},
+
+			test: {
+				options: {
+					base: '<%= paths.src %>',
+					//keep the server on
+					keepalive: true
 				}
 			},
 
 			dist: {
 				options: {
-					port: 8000,
 					base: '<%= paths.dist %>',
 					//keep the server on
 					keepalive: true
@@ -287,13 +313,20 @@ module.exports = function(grunt) {
 
 	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
 
-	grunt.registerTask('default', 'compass:dist');
+	grunt.registerTask('default', 'dev');
 
 	grunt.registerTask('dev', ['render:dev', 'devcode:dev', 'connect:dev', 'open:dev', 'watch']);
 
 	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'devcode:dist', 'premailer:dist'] );
 
-	grunt.registerTask('test', ['dist', 'send:dist', 'connect:dist']);
-
+	grunt.registerTask('test', 'Simulates an email delivery. Either use "test:dev" or "test:dist"', function (env) {
+		if (env === 'dev') {
+			grunt.task.run(['compass:dev', 'render:dev', 'devcode:dev', 'premailer:dev', 'send:dev', 'connect:test']);
+		} else if (env === 'dist') {
+			grunt.task.run(['dist', 'send:dist']);
+		} else {
+			grunt.fail.fatal('Test environment needed. Either use "test:dev" or "test:dist"');
+		}
+	});
 
 };
