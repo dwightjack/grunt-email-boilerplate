@@ -1,48 +1,48 @@
 /* Some sensible defaults for images
 Bring inline: Yes. */
-/* line 3, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\000033}}
 img {
   outline: none;
   text-decoration: none;
   -ms-interpolation-mode: bicubic;
 }
 
-/* line 4, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\000034}}
 a img {
   border: none;
 }
 
-/* line 5, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\000035}}
 .image_fix {
   display: block;
 }
 
 /* Yahoo paragraph fix
 Bring inline: Yes. */
-/* line 9, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\000039}}
 p {
   margin: 1em 0;
 }
 
 /* Hotmail header color reset
 Bring inline: Yes. */
-/* line 13, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000313}}
 h1, h2, h3, h4, h5, h6 {
   color: black !important;
 }
 
-/* line 15, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000315}}
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   color: blue !important;
 }
 
-/* line 17, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000317}}
 h1 a:active, h2 a:active, h3 a:active, h4 a:active, h5 a:active, h6 a:active {
   color: #4040c4 !important;
   /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
 }
 
-/* line 21, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000321}}
 h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
   color: #4040c4 !important;
   /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
@@ -50,14 +50,14 @@ h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visit
 
 /* Outlook 07, 10 Padding issue fix
 Bring inline: No.*/
-/* line 27, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000327}}
 table td {
   border-collapse: collapse;
 }
 
 /* Remove spacing around Outlook 07, 10 tables
 Bring inline: Yes */
-/* line 31, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000331}}
 table {
   border-collapse: collapse;
   mso-table-lspace: 0pt;
@@ -66,18 +66,18 @@ table {
 
 /* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email and make sure to bring your styles inline.  Your link colors will be uniform across clients when brought inline.
 Bring inline: Yes. */
-/* line 35, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000335}}
 a {
   color: blue;
 }
 
-/* line 37, ../scss/_base.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_base\.scss}line{font-family:\0000337}}
 body {
   margin: 0;
   padding: 0;
 }
 
-/* line 2, ../scss/_main.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_main\.scss}line{font-family:\000032}}
 #test {
   color: red;
 }
@@ -89,7 +89,7 @@ MOBILE TARGETING
 ***************************************************/
 @media only screen and (max-device-width: 480px) {
   /* Part one of controlling phone number linking for mobile. */
-  /* line 8, ../scss/_media-queries.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_media-queries\.scss}line{font-family:\000038}}
   a[href^="tel"], a[href^="sms"] {
     text-decoration: none;
     color: blue;
@@ -98,7 +98,7 @@ MOBILE TARGETING
     cursor: default;
   }
 
-  /* line 15, ../scss/_media-queries.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_media-queries\.scss}line{font-family:\0000315}}
   .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
     text-decoration: default;
     color: orange !important;
@@ -110,7 +110,7 @@ MOBILE TARGETING
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   /* You guessed it, ipad (tablets, smaller screens, etc) */
   /* repeating for the ipad */
-  /* line 29, ../scss/_media-queries.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_media-queries\.scss}line{font-family:\0000329}}
   a[href^="tel"], a[href^="sms"] {
     text-decoration: none;
     color: blue;
@@ -119,7 +119,7 @@ MOBILE TARGETING
     cursor: default;
   }
 
-  /* line 36, ../scss/_media-queries.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/web\/shared\/grunt-email-boilerplate\/src\/scss\/_media-queries\.scss}line{font-family:\0000336}}
   .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
     text-decoration: default;
     color: orange !important;

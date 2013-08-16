@@ -170,3 +170,4 @@ _tmp.*
 smtptransp.json
 node_modules
 .sass-cache
+.tags
