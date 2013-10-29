@@ -1,7 +1,7 @@
 {
   "name": "grunt-email-boilerplate",
   "description": "An Enhanced HTML E-mail Boilerplate",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": {
     "name": "Marco \"DWJ\" Solazzi",
     "url": "https://github.com/dwightjack"
@@ -31,15 +31,14 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "nodemailer": "~0.5",
+    "grunt-nodemailer": "~0.1",
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.5",
-    "grunt-contrib-connect": "~0.3",
+    "grunt-contrib-connect": "~0.5",
     "grunt-contrib-copy": "~0.4",
-    "grunt-contrib-imagemin": "~0.1",
+    "grunt-contrib-imagemin": "~0.3",
     "grunt-contrib-clean": "~0.5",
     "grunt-contrib-compass": "~0.5",
-    "grunt-open": "~0.2",
     "grunt-ejs-render": "~0.1"
   }
 }
