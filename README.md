@@ -6,7 +6,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
-* inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
+* inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
 * Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
 * test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
@@ -93,7 +93,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 v0.2.3  
-	- bugfixes and updates, send task moved to [external grunt plugin](https://github.com/dwightjack/grunt-nodemailer). `send` task renamed to `nodemailer`, `test` renamed to `send` as in [generator-htmlemail](https://github.com/jahvi/generator-htmlemail).
+	- bugfixes and updates, send task moved to [external grunt plugin](https://github.com/dwightjack/grunt-nodemailer), premailer task moved to [external grunt plugin](https://github.com/dwightjack/grunt-premailer). `send` task renamed to `nodemailer`, `test` renamed to `send` as in [generator-htmlemail](https://github.com/jahvi/generator-htmlemail).
 
 v0.2.2  
 	- better test handling. Updated dependencies.

@@ -39,6 +39,7 @@
     "grunt-contrib-imagemin": "~0.3",
     "grunt-contrib-clean": "~0.5",
     "grunt-contrib-compass": "~0.5",
-    "grunt-ejs-render": "~0.1"
+    "grunt-ejs-render": "~0.1",
+    "grunt-premailer": "~0.1.0"
   }
 }

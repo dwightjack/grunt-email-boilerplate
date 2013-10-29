@@ -148,27 +148,44 @@ module.exports = function(grunt) {
 		 */
 		premailer: {
 
-			dist: {
-				//source file path
-				src: '<%= paths.dist %>/<%= paths.email %>',
-				// overwrite source file
-				dest: '<%= paths.dist %>/<%= paths.email %>',
+			dist_html: {
 				options: {
-					//accepts any compass command line option
-					//replace mid dashes `-` with camelCase
-					//ie: --base-url => baseUrl
-					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
+					//see https://github.com/dwightjack/grunt-premailer#options
 					baseUrl: '<%= paths.distDomain %>'
+				},
+				files: {
+					'<%= paths.dist %>/<%= paths.email %>': ['<%= paths.dist %>/<%= paths.email %>']
 				}
+
+			},
+			dist_txt: {
+				options: {
+					baseUrl: '<%= paths.distDomain %>',
+					mode: 'txt'
+				},
+				files: {
+					'<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.dist %>/<%= paths.email %>']
+				}
+
 			},
 
-			dev: {
-				src: '<%= paths.src %>/_tmp.<%= paths.email %>',
-				// overwrite source file
-				dest: '<%= paths.src %>/_tmp.<%= paths.email %>',
-
+			dev_html: {
 				options: {
 					baseUrl: '<%= paths.devDomain %>'
+				},
+				files: {
+					// overwrite source file
+					'<%= paths.src %>/_tmp.<%= paths.email %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
+				}
+			},
+			dev_txt: {
+				options: {
+					baseUrl: '<%= paths.devDomain %>',
+					mode: 'txt'
+				},
+				files: {
+					// overwrite source file
+					'<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
 				}
 			}
 		},
@@ -303,6 +320,7 @@ module.exports = function(grunt) {
 		'grunt-contrib-clean',
 		'grunt-contrib-compass',
 		'grunt-nodemailer',
+		'grunt-premailer',
 		'grunt-ejs-render'
 	].forEach(grunt.loadNpmTasks);
 
@@ -310,13 +328,35 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', 'dev');
 
-	grunt.registerTask('dev', ['render:dev', 'devcode:dev', 'connect:dev', 'watch']);
+	grunt.registerTask('dev', [
+		'render:dev',
+		'devcode:dev',
+		'connect:dev',
+		'watch'
+	]);
 
-	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'devcode:dist', 'premailer:dist'] );
+	grunt.registerTask('dist', [
+		'clean:dist',
+		'copy',
+		'imagemin:dist',
+		'compass:dist',
+		'render:dist',
+		'devcode:dist',
+		'premailer:dist_html',
+		'premailer:dist_txt'
+	]);
 
 	grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function (env) {
 		if (env === 'dev') {
-			grunt.task.run(['compass:dev', 'render:dev', 'devcode:dev', 'premailer:dev', 'nodemailer:dev', 'connect:send']);
+			grunt.task.run([
+				'compass:dev',
+				'render:dev',
+				'devcode:dev',
+				'premailer:dev_html',
+				'premailer:dev_txt',
+				'nodemailer:dev',
+				'connect:send'
+			]);
 		} else if (env === 'dist') {
 			grunt.task.run(['dist', 'nodemailer:dist']);
 		} else {
