@@ -6,10 +6,10 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
-* inlining CSS styles with [Premailer](http://premailer.dialect.ca/)
+* inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
 * Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
-* test email delivery with [NodeMailer](https://github.com/andris9/Nodemailer)
+* test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
 
@@ -73,9 +73,9 @@ This tasks creates a build from your sources. It creates a folder named `dist{YY
 
 Images are optimized with jpegtran and OptiPNG.
 
-**`test` Tasks**
+**`send` Tasks** (was `test` before v0.2.3)
 
-Extends `dev` and `dist` tasks by sending the compiled email to any configured recipient. In order to use this task you have to provide a target environment by running either `test:dev` or `test:dist`.  
+Extends `dev` and `dist` tasks by sending the compiled email to any configured recipient. In order to use this task you have to provide a target environment by running either `send:dev` or `send:dist`.  
 To customize email transports and recipients refer to the `send` tasks in `Gruntfile.js`.
 
 ###Tasks Customization
@@ -92,11 +92,14 @@ By default tasks refer to `http://localhost:8000` as the test URL, anyway you ma
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.2.3  
+	- bugfixes and updates, send task moved to [external grunt plugin](https://github.com/dwightjack/grunt-nodemailer), premailer task moved to [external grunt plugin](https://github.com/dwightjack/grunt-premailer). `send` task renamed to `nodemailer`, `test` renamed to `send` as in [generator-htmlemail](https://github.com/jahvi/generator-htmlemail).
+
 v0.2.2  
 	- better test handling. Updated dependencies.
 
 v0.2.1  
-	- render task moved to [external grunt plugin](https://github.com/dwightjack/grunt-ejs-render)
+	- render task moved to [external grunt plugin](https://github.com/dwightjack/grunt-ejs-render).
 
 v0.2  
 	- `ejs` templates are now statically rendered in development stage by the `watch` task. Added `open` and `devcode` tasks. Fixed some issues with the `imagemin` task.

@@ -148,27 +148,44 @@ module.exports = function(grunt) {
 		 */
 		premailer: {
 
-			dist: {
-				//source file path
-				src: '<%= paths.dist %>/<%= paths.email %>',
-				// overwrite source file
-				dest: '<%= paths.dist %>/<%= paths.email %>',
+			dist_html: {
 				options: {
-					//accepts any compass command line option
-					//replace mid dashes `-` with camelCase
-					//ie: --base-url => baseUrl
-					//see https://github.com/alexdunae/premailer/wiki/Premailer-Command-Line-Usage
+					//see https://github.com/dwightjack/grunt-premailer#options
 					baseUrl: '<%= paths.distDomain %>'
+				},
+				files: {
+					'<%= paths.dist %>/<%= paths.email %>': ['<%= paths.dist %>/<%= paths.email %>']
 				}
+
+			},
+			dist_txt: {
+				options: {
+					baseUrl: '<%= paths.distDomain %>',
+					mode: 'txt'
+				},
+				files: {
+					'<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.dist %>/<%= paths.email %>']
+				}
+
 			},
 
-			dev: {
-				src: '<%= paths.src %>/_tmp.<%= paths.email %>',
-				// overwrite source file
-				dest: '<%= paths.src %>/_tmp.<%= paths.email %>',
-
+			dev_html: {
 				options: {
 					baseUrl: '<%= paths.devDomain %>'
+				},
+				files: {
+					// overwrite source file
+					'<%= paths.src %>/_tmp.<%= paths.email %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
+				}
+			},
+			dev_txt: {
+				options: {
+					baseUrl: '<%= paths.devDomain %>',
+					mode: 'txt'
+				},
+				files: {
+					// overwrite source file
+					'<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
 				}
 			}
 		},
@@ -199,23 +216,28 @@ module.exports = function(grunt) {
 		 * Test Mailer Tasks
 		 * ===============================
 		 */
-		send: {
+		nodemailer: {
 
 			options: {
 
 				/**
 				 * Defaults to sendmail
-				 * Here follows a Gmail SMTP exeample trasport
+				 * Here follows a Gmail SMTP example transport
 				 * @see https://github.com/andris9/Nodemailer
 				 */
 				/*transport: {
-					"type": "SMTP",
-					"service": "Gmail",
-					"auth": {
-						"user": "john.doe@gmail.com",
-						"pass": "password"
+					type: 'SMTP',
+					options: {
+						service: 'Gmail',
+						auth: {
+							user: 'john.doe@gmail.com',
+							pass: 'password'
+						}
 					}
-				},
+				},*/
+
+				from: '<John Doe> john.doe@gmail.com',
+
 				// HTML and TXT email
 				// A collection of recipients
 				recipients: [
@@ -223,15 +245,15 @@ module.exports = function(grunt) {
 						email: 'jane.doe@gmail.com',
 						name: 'Jane Doe'
 					}
-				]*/
+				]
 			},
 
 			dist: {
-				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/email.txt']
+				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>']
 			},
 
 			dev: {
-				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.email.txt']
+				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>']
 			}
 
 		},
@@ -252,17 +274,6 @@ module.exports = function(grunt) {
 			}
 		},
 
-
-		/**
-		 * Open Browser (used internally)
-		 * ===============================
-		 */
-		open: {
-			dev : {
-				path: '<%= paths.devDomain %>_tmp.<%= paths.email %>'
-			}
-		},
-
 		/**
 		 * Server Tasks (used internally)
 		 * ===============================
@@ -271,7 +282,8 @@ module.exports = function(grunt) {
 
 			options: {
 				hostname: '*',
-				port: 8000
+				port: 8000,
+				open: '<%= paths.devDomain %>_tmp.<%= paths.email %>'
 			},
 
 			dev: {
@@ -280,7 +292,7 @@ module.exports = function(grunt) {
 				}
 			},
 
-			test: {
+			send: {
 				options: {
 					base: '<%= paths.src %>',
 					//keep the server on
@@ -307,7 +319,8 @@ module.exports = function(grunt) {
 		'grunt-contrib-imagemin',
 		'grunt-contrib-clean',
 		'grunt-contrib-compass',
-		'grunt-open',
+		'grunt-nodemailer',
+		'grunt-premailer',
 		'grunt-ejs-render'
 	].forEach(grunt.loadNpmTasks);
 
@@ -315,17 +328,39 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', 'dev');
 
-	grunt.registerTask('dev', ['render:dev', 'devcode:dev', 'connect:dev', 'open:dev', 'watch']);
+	grunt.registerTask('dev', [
+		'render:dev',
+		'devcode:dev',
+		'connect:dev',
+		'watch'
+	]);
 
-	grunt.registerTask('dist', ['clean:dist', 'copy', 'imagemin:dist', 'compass:dist', 'render:dist', 'devcode:dist', 'premailer:dist'] );
+	grunt.registerTask('dist', [
+		'clean:dist',
+		'copy',
+		'imagemin:dist',
+		'compass:dist',
+		'render:dist',
+		'devcode:dist',
+		'premailer:dist_html',
+		'premailer:dist_txt'
+	]);
 
-	grunt.registerTask('test', 'Simulates an email delivery. Either use "test:dev" or "test:dist"', function (env) {
+	grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function (env) {
 		if (env === 'dev') {
-			grunt.task.run(['compass:dev', 'render:dev', 'devcode:dev', 'premailer:dev', 'send:dev', 'connect:test']);
+			grunt.task.run([
+				'compass:dev',
+				'render:dev',
+				'devcode:dev',
+				'premailer:dev_html',
+				'premailer:dev_txt',
+				'nodemailer:dev',
+				'connect:send'
+			]);
 		} else if (env === 'dist') {
-			grunt.task.run(['dist', 'send:dist']);
+			grunt.task.run(['dist', 'nodemailer:dist']);
 		} else {
-			grunt.fail.fatal('Test environment needed. Either use "test:dev" or "test:dist"');
+			grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
 		}
 	});
 
