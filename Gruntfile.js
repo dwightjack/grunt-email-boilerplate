@@ -232,11 +232,11 @@ module.exports = function(grunt) {
 			},
 
 			dist: {
-				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/email.txt']
+				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>']
 			},
 
 			dev: {
-				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.email.txt']
+				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>']
 			}
 
 		},
