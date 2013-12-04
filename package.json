@@ -1,7 +1,7 @@
 {
   "name": "grunt-email-boilerplate",
   "description": "An Enhanced HTML E-mail Boilerplate",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": {
     "name": "Marco \"DWJ\" Solazzi",
     "url": "https://github.com/dwightjack"
@@ -40,6 +40,6 @@
     "grunt-contrib-clean": "~0.5",
     "grunt-contrib-compass": "~0.6",
     "grunt-ejs-render": "~0.1",
-    "grunt-premailer": "~0.1.0"
+    "grunt-premailer": "~0.2.0"
   }
 }
