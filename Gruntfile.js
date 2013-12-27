@@ -2,8 +2,9 @@
 module.exports = function(grunt) {
 	"use strict";
 
-	var path = require('path'),
-		_ = grunt.util._;
+	var path = require('path');
+
+	require('load-grunt-tasks')(grunt);
 
 	// Project configuration.
 	grunt.initConfig({
@@ -20,18 +21,40 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		paths: {
-			//images folder name
-			images: 'images',
 			//where to store built files
 			dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
 			//sources
 			src: 'src',
-			//main email file
-			email: 'email.html',
-			//enter here yout production domain
-			distDomain: 'http://www.mydomain.com/',
-			//this is the default development domain
-			devDomain: 'http://localhost:8000/'
+			//where json files are stored
+			data: '<%= paths.src %>/data',
+			//temporary files
+			tmp: '.tmp',
+			//pattern to HTML email files
+			email: '*.html'
+		},
+
+
+		/**
+		 * Hosts Configuration
+		 * ===============================
+		 */
+		hosts: {
+			//enter here yout production host details
+			production: {
+				url: 'http://www.mydomain.com/',
+				host: 'remote.host',
+				username: 'username',
+				password: 'password',
+				path: '/path/to/www'
+			},
+			development: {
+				//this is the default development domain
+				url: 'http://localhost:8000/',
+				host: 'local.host',
+				username: 'username',
+				password: 'password',
+				path: '/path/to/www'
+			}
 		},
 
 
@@ -40,25 +63,24 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		clean: {
-			dist: ['<%= paths.dist %>']
+			dist: ['<%= paths.dist %>', '<%= paths.tmp %>']
 		},
 
 
 		/**
-		 * Copy gif files Tasks (used internally)
+		 * Copy image files Tasks (used internally)
 		 * ===============================
 		 */
 		copy: {
-			gif: {
+			images: {
 				files: [{
 					expand: true,
-					cwd: '<%= paths.src %>/<%=paths.images %>',
-					src: ['**/*.gif'],
-					dest: '<%= paths.dist %>/<%=paths.images %>'
+					cwd: '<%= paths.src %>/images',
+					src: ['**/*.{gif,png,jpg}'],
+					dest: '<%= paths.tmp %>/images'
 				}]
 			}
 		},
-
 
 
 		/**
@@ -69,8 +91,8 @@ module.exports = function(grunt) {
 
 			dev: {
 				options: {
-					//set the parent folder of scss files
-					basePath : '<%= paths.src %>',
+					cssDir: '<%= paths.tmp %>/css',
+					imagesDir: '<%= paths.tmp %>/images',
 					//accepts some compass command line option
 					//see https://github.com/gruntjs/grunt-contrib-compass
 					config: path.normalize(__dirname + '/vendor/compass-config.rb')
@@ -79,11 +101,11 @@ module.exports = function(grunt) {
 
 			dist: {
 				options: {
-					basePath : '<%= paths.dist %>',
+					cssDir: '<%= paths.dist %>/css',
+					imagesDir: '<%= paths.dist %>/images',
 					force: true,
 					environment: 'production',
 					config: path.normalize(__dirname + '/vendor/compass-config.rb'),
-					sassDir: '../<%= paths.src %>/scss'
 				}
 			}
 		},
@@ -95,15 +117,16 @@ module.exports = function(grunt) {
 		 */
 		render: {
 			options: {
-				data: 'data/data.json',
+				data: ['<%= paths.data %>/*.json'],
 			},
-			dev: {
-				src: '<%= paths.src %>/<%= paths.email %>',
-				dest: '<%= paths.src %>/_tmp.<%= paths.email %>'
-			},
-			dist: {
-				src: '<%= paths.src %>/<%= paths.email %>',
-				dest: '<%= paths.dist %>/<%= paths.email %>'
+
+			html: {
+				files: [{
+					expand: true,
+					cwd: '<%= paths.src %>/',
+					src: ['<%= paths.email %>'],
+					dest: '<%= paths.tmp %>/'
+				}]
 			}
 		},
 
@@ -111,34 +134,25 @@ module.exports = function(grunt) {
 		 * Environment Related Task
 		 * ===============================
 		 */
-		devcode: {
+		preprocess: {
 			options: {
-				html: true, // html files parsing?
-				js: false, // javascript files parsing?
-				css: false, // css files parsing?
-				clean: true, // removes devcode comments even if code was not removed
-				block: {
-					open: 'devcode', // with this string we open a block of code
-					close: 'endcode' // with this string we close a block of code
-				},
-				dest: 'dev' // default destination which overwrittes environment variable
+				inline: true
 			},
-			dev: { // settings for task used with 'devcode:dev'
+			dev: {
+				src: ['<%= paths.tmp %>/<%= paths.email %>']
+			},
+			dist: {
 				options: {
-					source: '<%= paths.src %>/',
-					dest: '<%= paths.src %>/',
-					env: 'development',
-					filter: function (filepath) {
-						return path.basename(filepath) !== grunt.template.process('<%= paths.email %>');
+					context: {
+						PRODUCTION: true
 					}
-				}
-			},
-			dist: { // settings for task used with 'devcode:dist'
-				options: {
-					source: '<%= paths.dist %>/',
-					dest: '<%= paths.dist %>/',
-					env: 'production'
-				}
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= paths.tmp %>/',
+					src: ['<%= paths.email %>'],
+					dest: '<%= paths.dist %>/'
+				}]
 			}
 		},
 
@@ -151,42 +165,47 @@ module.exports = function(grunt) {
 			dist_html: {
 				options: {
 					//see https://github.com/dwightjack/grunt-premailer#options
-					baseUrl: '<%= paths.distDomain %>'
+					//css is used to be sure that external CSS files are parsed
+					css: ['<%= paths.dist %>/css/*.css'],
+					baseUrl: '<%= hosts.production.url %>'
 				},
-				files: {
-					'<%= paths.dist %>/<%= paths.email %>': ['<%= paths.dist %>/<%= paths.email %>']
-				}
+				src: ['<%= paths.dist %>/<%= paths.email %>']
 
 			},
 			dist_txt: {
 				options: {
-					baseUrl: '<%= paths.distDomain %>',
+					baseUrl: '<%= hosts.production.url %>',
 					mode: 'txt'
 				},
-				files: {
-					'<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.dist %>/<%= paths.email %>']
-				}
+				files: [{
+					expand: true,
+					cwd: '<%= paths.dist %>/',
+					src: ['<%= paths.email %>'],
+					dest: '<%= paths.dist %>/',
+					ext: '.txt'
+				}]
 
 			},
 
 			dev_html: {
 				options: {
-					baseUrl: '<%= paths.devDomain %>'
+					css: ['<%= paths.tmp %>/css/*.css'],
+					baseUrl: '<%= hosts.development.url %>'
 				},
-				files: {
-					// overwrite source file
-					'<%= paths.src %>/_tmp.<%= paths.email %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
-				}
+				src: ['<%= paths.tmp %>/<%= paths.email %>']
 			},
 			dev_txt: {
 				options: {
-					baseUrl: '<%= paths.devDomain %>',
+					baseUrl: '<%= hosts.development.url %>',
 					mode: 'txt'
 				},
-				files: {
-					// overwrite source file
-					'<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>': ['<%= paths.src %>/_tmp.<%= paths.email %>']
-				}
+				files: [{
+					expand: true,
+					cwd: '<%= paths.tmp %>/',
+					src: ['<%= paths.email %>'],
+					dest: '<%= paths.tmp %>/',
+					ext: '.txt'
+				}]
 			}
 		},
 
@@ -199,14 +218,11 @@ module.exports = function(grunt) {
 		imagemin: {
 
 			dist: {
-				options: {
-					optimizationLevel: 3
-				},
 				files: [{
 					expand: true,
-					cwd: '<%= paths.src %>/<%=paths.images %>',
-					src: ['**/*'],
-					dest: '<%= paths.dist %>/<%=paths.images %>'
+					cwd: '<%= paths.tmp %>/images',
+					src: ['**/*.{gif,png,jpg}'],
+					dest: '<%= paths.dist %>/images'
 				}]
 			}
 		},
@@ -240,12 +256,10 @@ module.exports = function(grunt) {
 
 				// HTML and TXT email
 				// A collection of recipients
-				recipients: [
-					{
-						email: 'jane.doe@gmail.com',
-						name: 'Jane Doe'
-					}
-				]
+				recipients: [{
+					email: 'jane.doe@gmail.com',
+					name: 'Jane Doe'
+				}]
 			},
 
 			dist: {
@@ -308,23 +322,11 @@ module.exports = function(grunt) {
 				}
 			}
 
-		  }
+		}
 
 	});
 
-	[
-		'grunt-contrib-connect',
-		'grunt-contrib-watch',
-		'grunt-contrib-copy',
-		'grunt-contrib-imagemin',
-		'grunt-contrib-clean',
-		'grunt-contrib-compass',
-		'grunt-nodemailer',
-		'grunt-premailer',
-		'grunt-ejs-render'
-	].forEach(grunt.loadNpmTasks);
-
-	grunt.loadTasks( path.normalize(__dirname + '/vendor/tasks') );
+	grunt.loadTasks(path.normalize(__dirname + '/vendor/tasks'));
 
 	grunt.registerTask('default', 'dev');
 
@@ -337,7 +339,6 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dist', [
 		'clean:dist',
-		'copy',
 		'imagemin:dist',
 		'compass:dist',
 		'render:dist',
@@ -346,7 +347,7 @@ module.exports = function(grunt) {
 		'premailer:dist_txt'
 	]);
 
-	grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function (env) {
+	grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
 		if (env === 'dev') {
 			grunt.task.run([
 				'compass:dev',

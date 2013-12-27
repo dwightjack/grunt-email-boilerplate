@@ -13,11 +13,11 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 
 ##Requirements
 
-* Node.js >= 0.8.11 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt-cli >= 0.1.7 and Grunt >=0.4.1 (`npm install grunt-cli -g`)
-* Ruby >= 1.8.7 ([installers](http://www.ruby-lang.org/en/downloads/))
+* Node.js >= 0.10.20 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
+* Grunt-cli >= 0.1.7 and Grunt >=0.4.2 (`npm install grunt-cli -g`)
+* Ruby >= 1.9.3 ([installers](http://www.ruby-lang.org/en/downloads/))
 * Compass >= 0.12.2 (`gem install compass`)
-* Premailer >= 1.7.3 (`gem install premailer` and, most of the time, `gem install hpricot`)
+* Premailer >= 1.7.9 (`gem install premailer` and, most of the time, `gem install hpricot`)
 
 ## Getting Started
 
@@ -37,8 +37,26 @@ To install the boilerplate
 
 4. Run the development task `grunt dev` and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
 
-## Documentation
+## 0.2 to 0.3 Changes
 
+Version 0.3 introduces several changes to included plugins, tasks and folders' structure:
+
+* **System changes**
+** Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.7.9 and Grunt >=0.4.2
+* **Files and folder changes** 
+** `data` folder moved into `src`
+** intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`.tmp` by default)
+* **Tasks and configuration changes**
+** Updated all tasks to latest versions
+** Removed `distDomain` and `devDomain` paths in favor of dedicated `hosts` configuration object
+** Removed `paths.images` configuration
+** Boilerplate now allows multiple email files (`paths.email === '*.html'`)
+** Removed `grunt-devcode` in favor of [`grunt-preprocess`](https://github.com/jsoverson/grunt-preprocess)
+** 
+
+
+
+## Documentation
 
 ###Sources
 
