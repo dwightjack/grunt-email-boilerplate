@@ -52,7 +52,8 @@ Version 0.3 introduces several changes to included plugins, tasks and folders' s
 ** Removed `paths.images` configuration
 ** Boilerplate now allows multiple email files (`paths.email === '*.html'`)
 ** Removed `grunt-devcode` in favor of [`grunt-preprocess`](https://github.com/jsoverson/grunt-preprocess)
-** 
+** Using `grunt-contrib-compass` watch option instead of a `watch` sub-task.
+** Enabled `livereload`
 
 
 

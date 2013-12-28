@@ -1,368 +1,399 @@
 /*jshint node:true */
 module.exports = function(grunt) {
-	"use strict";
+    'use strict';
 
-	var path = require('path');
+    var path = require('path');
 
-	require('load-grunt-tasks')(grunt);
+    require('load-grunt-tasks')(grunt);
 
-	// Project configuration.
-	grunt.initConfig({
+    // Project configuration.
+    grunt.initConfig({
 
-		pkg: grunt.file.readJSON('package.json'),
+        pkg: grunt.file.readJSON('package.json'),
 
-		/* rigt now this is useless... */
-		meta: {
-			banner: ''
-		},
+        /* rigt now this is useless... */
+        meta: {
+            banner: ''
+        },
 
-		/**
-		 * Project Paths Configuration
-		 * ===============================
-		 */
-		paths: {
-			//where to store built files
-			dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
-			//sources
-			src: 'src',
-			//where json files are stored
-			data: '<%= paths.src %>/data',
-			//temporary files
-			tmp: '.tmp',
-			//pattern to HTML email files
-			email: '*.html'
-		},
-
-
-		/**
-		 * Hosts Configuration
-		 * ===============================
-		 */
-		hosts: {
-			//enter here yout production host details
-			production: {
-				url: 'http://www.mydomain.com/',
-				host: 'remote.host',
-				username: 'username',
-				password: 'password',
-				path: '/path/to/www'
-			},
-			development: {
-				//this is the default development domain
-				url: 'http://localhost:8000/',
-				host: 'local.host',
-				username: 'username',
-				password: 'password',
-				path: '/path/to/www'
-			}
-		},
+        /**
+         * Project Paths Configuration
+         * ===============================
+         */
+        paths: {
+            //where to store built files
+            dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
+            //sources
+            src: 'src',
+            //where json files are stored
+            data: '<%= paths.src %>/data',
+            //temporary files
+            tmp: '.tmp',
+            //pattern to HTML email files
+            email: '*.html'
+        },
 
 
-		/**
-		 * Cleanup Tasks (used internally)
-		 * ===============================
-		 */
-		clean: {
-			dist: ['<%= paths.dist %>', '<%= paths.tmp %>']
-		},
+        /**
+         * Hosts Configuration
+         * ===============================
+         */
+        hosts: {
+            //enter here yout production host details
+            production: {
+                url: 'http://www.mydomain.com',
+                host: 'remote.host',
+                username: 'username',
+                password: 'password',
+                path: '/path/to/www'
+            },
+            development: {
+                //this is the default development domain
+                url: 'http://localhost',
+                host: 'local.host',
+                username: 'username',
+                password: 'password',
+                path: '/path/to/www',
+                port: 8000
+            }
+        },
 
 
-		/**
-		 * Copy image files Tasks (used internally)
-		 * ===============================
-		 */
-		copy: {
-			images: {
-				files: [{
-					expand: true,
-					cwd: '<%= paths.src %>/images',
-					src: ['**/*.{gif,png,jpg}'],
-					dest: '<%= paths.tmp %>/images'
-				}]
-			}
-		},
+        /**
+         * Cleanup Tasks (used internally)
+         * ===============================
+         */
+        clean: {
+            all: ['<%= paths.dist %>', '<%= paths.tmp %>']
+        },
 
 
-		/**
-		 * SCSS Compilation Tasks
-		 * ===============================
-		 */
-		compass: {
-
-			dev: {
-				options: {
-					cssDir: '<%= paths.tmp %>/css',
-					imagesDir: '<%= paths.tmp %>/images',
-					//accepts some compass command line option
-					//see https://github.com/gruntjs/grunt-contrib-compass
-					config: path.normalize(__dirname + '/vendor/compass-config.rb')
-				}
-			},
-
-			dist: {
-				options: {
-					cssDir: '<%= paths.dist %>/css',
-					imagesDir: '<%= paths.dist %>/images',
-					force: true,
-					environment: 'production',
-					config: path.normalize(__dirname + '/vendor/compass-config.rb'),
-				}
-			}
-		},
+        /**
+         * Copy image files Tasks (used internally)
+         * ===============================
+         */
+        copy: {
+            images: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.src %>/images',
+                    src: ['**/*.{gif,png,jpg}'],
+                    dest: '<%= paths.tmp %>/images'
+                }]
+            }
+        },
 
 
-		/**
-		 * Static EJS Render Task
-		 * ===============================
-		 */
-		render: {
-			options: {
-				data: ['<%= paths.data %>/*.json'],
-			},
+        /**
+         * SCSS Compilation Tasks (used internally)
+         * ===============================
+         */
+        compass: {
 
-			html: {
-				files: [{
-					expand: true,
-					cwd: '<%= paths.src %>/',
-					src: ['<%= paths.email %>'],
-					dest: '<%= paths.tmp %>/'
-				}]
-			}
-		},
+            options: {
+                //default options for development and watch environment
+                //accepts some compass command line option
+                //see https://github.com/gruntjs/grunt-contrib-compass
+                config: path.normalize(__dirname + '/vendor/compass-config.rb'),
+                cssDir: '<%= paths.tmp %>/css',
+                imagesDir: '<%= paths.tmp %>/images'
+            },
 
-		/**
-		 * Environment Related Task
-		 * ===============================
-		 */
-		preprocess: {
-			options: {
-				inline: true
-			},
-			dev: {
-				src: ['<%= paths.tmp %>/<%= paths.email %>']
-			},
-			dist: {
-				options: {
-					context: {
-						PRODUCTION: true
-					}
-				},
-				files: [{
-					expand: true,
-					cwd: '<%= paths.tmp %>/',
-					src: ['<%= paths.email %>'],
-					dest: '<%= paths.dist %>/'
-				}]
-			}
-		},
+            watch: {
+                options: {
+                    watch: true
+                }
+            },
 
-		/**
-		 * Premailer Parser Tasks
-		 * ===============================
-		 */
-		premailer: {
+            dev: {},
 
-			dist_html: {
-				options: {
-					//see https://github.com/dwightjack/grunt-premailer#options
-					//css is used to be sure that external CSS files are parsed
-					css: ['<%= paths.dist %>/css/*.css'],
-					baseUrl: '<%= hosts.production.url %>'
-				},
-				src: ['<%= paths.dist %>/<%= paths.email %>']
-
-			},
-			dist_txt: {
-				options: {
-					baseUrl: '<%= hosts.production.url %>',
-					mode: 'txt'
-				},
-				files: [{
-					expand: true,
-					cwd: '<%= paths.dist %>/',
-					src: ['<%= paths.email %>'],
-					dest: '<%= paths.dist %>/',
-					ext: '.txt'
-				}]
-
-			},
-
-			dev_html: {
-				options: {
-					css: ['<%= paths.tmp %>/css/*.css'],
-					baseUrl: '<%= hosts.development.url %>'
-				},
-				src: ['<%= paths.tmp %>/<%= paths.email %>']
-			},
-			dev_txt: {
-				options: {
-					baseUrl: '<%= hosts.development.url %>',
-					mode: 'txt'
-				},
-				files: [{
-					expand: true,
-					cwd: '<%= paths.tmp %>/',
-					src: ['<%= paths.email %>'],
-					dest: '<%= paths.tmp %>/',
-					ext: '.txt'
-				}]
-			}
-		},
+            dist: {
+                options: {
+                    cssDir: '<%= paths.dist %>/css',
+                    imagesDir: '<%= paths.dist %>/images',
+                    force: true,
+                    environment: 'production'
+                }
+            }
+        },
 
 
+        /**
+         * Static EJS Render Tasks (used internally)
+         * ===============================
+         */
+        render: {
+            options: {
+                data: ['<%= paths.data %>/*.json'],
+            },
 
-		/**
-		 * Images Optimization Tasks
-		 * ===============================
-		 */
-		imagemin: {
+            html: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.src %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.tmp %>/'
+                }]
+            }
+        },
 
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '<%= paths.tmp %>/images',
-					src: ['**/*.{gif,png,jpg}'],
-					dest: '<%= paths.dist %>/images'
-				}]
-			}
-		},
+        /**
+         * Environment Related Tasks (used internally)
+         * ===============================
+         */
+        preprocess: {
+            options: {
+                inline: true
+            },
+            dev: {
+                src: ['<%= paths.tmp %>/<%= paths.email %>']
+            },
+            dist: {
+                options: {
+                    context: {
+                        PRODUCTION: true
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.dist %>/'
+                }]
+            }
+        },
+
+        /**
+         * Premailer Parser Tasks (used internally)
+         * ===============================
+         */
+        premailer: {
+
+            dist_html: {
+                options: {
+                    //see https://github.com/dwightjack/grunt-premailer#options
+                    //css is used to be sure that external CSS files are parsed
+                    css: ['<%= paths.dist %>/css/*.css'],
+                    baseUrl: '<%= hosts.production.url %>'
+                },
+                src: ['<%= paths.dist %>/<%= paths.email %>']
+
+            },
+            dist_txt: {
+                options: {
+                    baseUrl: '<%= hosts.production.url %>',
+                    mode: 'txt'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.dist %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.dist %>/',
+                    ext: '.txt'
+                }]
+
+            },
+
+            dev_html: {
+                options: {
+                    css: ['<%= paths.tmp %>/css/*.css'],
+                    baseUrl: '<%= hosts.development.url %>'
+                },
+                src: ['<%= paths.tmp %>/<%= paths.email %>']
+            },
+            dev_txt: {
+                options: {
+                    baseUrl: '<%= hosts.development.url %>',
+                    mode: 'txt'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.tmp %>/',
+                    ext: '.txt'
+                }]
+            }
+        },
 
 
-		/**
-		 * Test Mailer Tasks
-		 * ===============================
-		 */
-		nodemailer: {
 
-			options: {
-
-				/**
-				 * Defaults to sendmail
-				 * Here follows a Gmail SMTP example transport
-				 * @see https://github.com/andris9/Nodemailer
-				 */
-				/*transport: {
-					type: 'SMTP',
-					options: {
-						service: 'Gmail',
-						auth: {
-							user: 'john.doe@gmail.com',
-							pass: 'password'
-						}
-					}
-				},*/
-
-				from: '<John Doe> john.doe@gmail.com',
-
-				// HTML and TXT email
-				// A collection of recipients
-				recipients: [{
-					email: 'jane.doe@gmail.com',
-					name: 'Jane Doe'
-				}]
-			},
-
-			dist: {
-				src: ['<%= paths.dist %>/<%= paths.email %>', '<%= paths.dist %>/<% print(paths.email.replace(/\.html$/, ".txt")); %>']
-			},
-
-			dev: {
-				src: ['<%= paths.src %>/_tmp.<%= paths.email %>', '<%= paths.src %>/_tmp.<% print(paths.email.replace(/\.html$/, ".txt")); %>']
-			}
-
-		},
+        /**
+         * Images Optimization Tasks (used internally)
+         * ===============================
+         */
+        imagemin: {
+            options: {
+                progressive: false
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>/images',
+                    src: ['**/*.{gif,png,jpg}'],
+                    dest: '<%= paths.dist %>/images'
+                }]
+            }
+        },
 
 
-		/**
-		 * Watch Task (used internally)
-		 * ===============================
-		 */
-		watch: {
-			compass: {
-				files: ['src/scss/**/*.scss'],
-				tasks: ['compass:dev']
-			},
-			html: {
-				files: ['src/email.html', 'src/_inc/**/*.html'],
-				tasks: ['render:dev', 'devcode:dev']
-			}
-		},
+        /**
+         * Test Mailer Tasks (used internally)
+         * ===============================
+         */
+        nodemailer: {
 
-		/**
-		 * Server Tasks (used internally)
-		 * ===============================
-		 */
-		connect: {
+            options: {
 
-			options: {
-				hostname: '*',
-				port: 8000,
-				open: '<%= paths.devDomain %>_tmp.<%= paths.email %>'
-			},
+                /**
+                 * Defaults to sendmail
+                 * You may create a transport configuration file under `config` folder.
+                 * (ie: `config/nodemailer-transport.json`)
+                 * @see https://github.com/andris9/Nodemailer
+                 *
+                 * Here follows a Gmail SMTP example:
+                 * {
+                 *  "type": "SMTP",
+                 *  "options": {
+                 *      "service": "Gmail",
+                 *      "auth": {
+                 *          "user": "john.doe@gmail.com",
+                 *          "pass": "password"
+                 *      }
+                 *  }
+                 * }
+                 */
+                /* ,*/
+                transport: grunt.file.readJSON('config/nodemailer-transport.json'),
 
-			dev: {
-				options: {
-					base: '<%= paths.src %>'
-				}
-			},
+                message: {
+                    from: '<John Doe> john.doe@gmail.com'
+                },
 
-			send: {
-				options: {
-					base: '<%= paths.src %>',
-					//keep the server on
-					keepalive: true
-				}
-			},
 
-			dist: {
-				options: {
-					base: '<%= paths.dist %>',
-					//keep the server on
-					keepalive: true
-				}
-			}
+                // HTML and TXT email
+                // A collection of recipients
+                recipients: [{
+                    email: 'jane.doe@gmail.com',
+                    name: 'Jane Doe'
+                }]
+            },
 
-		}
+            dist: {
+                src: ['<%= paths.dist %>/<%= paths.email %>']
+            },
 
-	});
+            dev: {
+                src: ['<%= paths.tmp %>/<%= paths.email %>']
+            }
 
-	grunt.loadTasks(path.normalize(__dirname + '/vendor/tasks'));
+        },
 
-	grunt.registerTask('default', 'dev');
 
-	grunt.registerTask('dev', [
-		'render:dev',
-		'devcode:dev',
-		'connect:dev',
-		'watch'
-	]);
+        /**
+         * Watch Tasks (used internally)
+         * ===============================
+         */
+        watch: {
+            html: {
+                files: ['<%= paths.src %>/<%= paths.email %>', '<%= paths.src %>/inc/**/*.html', '<%= paths.data %>'],
+                tasks: ['render', 'preprocess:dev']
+            },
+            images: {
+                files: ['<%= paths.src %>/images/**/*.{gif,png,jpg}'],
+                tasks: ['copy:images']
+            },
+            livereload: {
+                options: {
+                    livereload: true
+                },
+                files: [
+                    '<%= paths.tmp %>/css/**/*.css',
+                    '<%= paths.tmp %>/<%= paths.email %>',
+                    '<%= paths.tmp %>/images/**/*.{gif,png,jpg}'
+                ]
+            }
+        },
 
-	grunt.registerTask('dist', [
-		'clean:dist',
-		'imagemin:dist',
-		'compass:dist',
-		'render:dist',
-		'devcode:dist',
-		'premailer:dist_html',
-		'premailer:dist_txt'
-	]);
+        /**
+         * Concurrent Task (used internally)
+         * ===============================
+         */
+        concurrent: {
+            options: {
+                logConcurrentOutput: true
+            },
+            dev: ['watch', 'compass:watch']
+        },
 
-	grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
-		if (env === 'dev') {
-			grunt.task.run([
-				'compass:dev',
-				'render:dev',
-				'devcode:dev',
-				'premailer:dev_html',
-				'premailer:dev_txt',
-				'nodemailer:dev',
-				'connect:send'
-			]);
-		} else if (env === 'dist') {
-			grunt.task.run(['dist', 'nodemailer:dist']);
-		} else {
-			grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
-		}
-	});
+        /**
+         * Server Tasks (used internally)
+         * ===============================
+         */
+        connect: {
+
+            options: {
+                hostname: '*',
+                port: '<%= hosts.development.port %>',
+                open: '<%= hosts.development.url %>:<%= hosts.development.port %>/',
+                base: ['<%= paths.tmp %>']
+            },
+
+            dev: {
+                options: {
+                    livereload: true
+                }
+            },
+
+            send_dev: {
+                options: {
+                    //keep the server on
+                    keepalive: true
+                }
+            }
+
+        }
+
+    });
+
+    grunt.registerTask('default', 'dev');
+
+    grunt.registerTask('dev', [
+        'clean',
+        'copy',
+        'compass:dev',
+        'render',
+        'preprocess:dev',
+        'connect:dev',
+        'concurrent'
+    ]);
+
+    grunt.registerTask('dist', [
+        'clean',
+        'imagemin:dist',
+        'compass:dist',
+        'render:dist',
+        'devcode:dist',
+        'premailer:dist_html',
+        'premailer:dist_txt'
+    ]);
+
+    grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
+        if (env === 'dev') {
+            grunt.task.run([
+                'compass:dev',
+                'render:dev',
+                'devcode:dev',
+                'premailer:dev_html',
+                'premailer:dev_txt',
+                'nodemailer:dev',
+                'connect:send'
+            ]);
+        } else if (env === 'dist') {
+            grunt.task.run(['dist', 'nodemailer:dist']);
+        } else {
+            grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
+        }
+    });
 
 };
