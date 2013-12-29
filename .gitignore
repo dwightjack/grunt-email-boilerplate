@@ -171,3 +171,4 @@ smtptransp.json
 node_modules
 .sass-cache
 .tags
+config/nodemailer-*
