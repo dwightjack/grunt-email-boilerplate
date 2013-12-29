@@ -113,6 +113,9 @@ By default tasks refer to `http://localhost:8000` as the test URL, anyway you ma
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.3.0  
+	- Updated plugins and workflow. See section _0.2 to 0.3 Changes_ for details.
+
 v0.2.4  
 	- updated [grunt-premailer](https://github.com/dwightjack/grunt-premailer) to v0.2.0.
 
