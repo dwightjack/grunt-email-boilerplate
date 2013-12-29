@@ -47,7 +47,7 @@
 		<table cellpadding="0" cellspacing="0" border="0" align="center">
 			<tr>
 				<!-- EJS templating support... -->
-				<td width="200" valign="top" id="test">If your name is <%= data.name %>...</td>
+				<td width="200" valign="top" id="test">If your name is <%= data.user.name %>...</td>
 				<!-- include helper. files are relative to `src`... -->
 				<td width="200" valign="top"><% include inc/_hello.html %></td>
 				<td width="200" valign="top">
@@ -71,7 +71,7 @@
 		<a href="http://htmlemailboilerplate.com" target ="_blank" title="Styling Links" style="color: orange; text-decoration: none;">Coloring Links appropriately</a>
 
 		<!-- Gmail/Hotmail image display fix -->
-		<img class="image_fix" src="full path to image" alt="Your alt text" title="Your title text" width="x" height="x" />
+		<img class="image_fix" src="images/test-gif.gif" alt="Your alt text" title="Your title text" width="x" height="x" />
 
 		<!-- Working with telephone numbers (including sms prompts).  Use the "mobile" class to style appropriately in desktop clients
 		versus mobile clients. -->
