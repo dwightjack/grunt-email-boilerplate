@@ -42,21 +42,20 @@ To install the boilerplate
 Version 0.3 introduces several changes to included plugins, tasks and folders' structure:
 
 * **System changes**
-** Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.7.9 and Grunt >=0.4.2
+	* Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.7.9 and Grunt >=0.4.2
 * **Files and folder changes** 
-** `data` folder moved into `src`
-** intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
-** build folder `dist` is no more suffixed with current date 
+	* `data` folder moved into `src`
+	* intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
+	* build folder `dist` is no more suffixed with current date 
 * **Tasks and configuration changes**
-** Updated all tasks to latest versions
-** Removed `distDomain` and `devDomain` paths in favor of dedicated `hosts` configuration object
-** Removed `paths.images` configuration
-** Boilerplate now allows multiple email files (`paths.email === '*.html'`)
-** Removed `grunt-devcode` in favor of [`grunt-preprocess`](https://github.com/jsoverson/grunt-preprocess)
-** Using `grunt-contrib-compass` watch option instead of a `watch` sub-task.
-** Enabled `livereload` feature
-** `send` task only allows testing on development environment. Transitory solution while looking for better integration with production environments.
-
+	* Updated all tasks to latest versions
+	* Removed `distDomain` and `devDomain` paths in favor of dedicated `hosts` configuration object
+	* Removed `paths.images` configuration
+	* Boilerplate now allows multiple email files (`paths.email === '*.html'`)
+	* Removed `grunt-devcode` in favor of [`grunt-preprocess`](https://github.com/jsoverson/grunt-preprocess)
+	* Using `grunt-contrib-compass` watch option instead of a `watch` sub-task.
+	* Enabled `livereload` feature
+	* `send` task only allows testing on development environment. Transitory solution while looking for better integration with production environments.
 
 
 ## Documentation
