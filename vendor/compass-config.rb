@@ -12,9 +12,4 @@ if environment == :production
 	line_comments = false
 end
 
-
-if environment != :production
-	sass_options = {:debug_info => true}
-end
-
 Sass::Script::Number.precision = 10

@@ -35,7 +35,7 @@ To install the boilerplate
 
 	`npm install`
 
-4. Run the development task `grunt dev` and start editing email files in `src` folder (`email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/_tmp.email.html`.
+4. Run the development task `grunt dev` and start editing email files in `src` folder (by default `email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/`.
 
 ## 0.2 to 0.3 Changes
 
@@ -45,7 +45,8 @@ Version 0.3 introduces several changes to included plugins, tasks and folders' s
 ** Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.7.9 and Grunt >=0.4.2
 * **Files and folder changes** 
 ** `data` folder moved into `src`
-** intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`.tmp` by default)
+** intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
+** build folder `dist` is no more suffixed with current date 
 * **Tasks and configuration changes**
 ** Updated all tasks to latest versions
 ** Removed `distDomain` and `devDomain` paths in favor of dedicated `hosts` configuration object
@@ -53,7 +54,8 @@ Version 0.3 introduces several changes to included plugins, tasks and folders' s
 ** Boilerplate now allows multiple email files (`paths.email === '*.html'`)
 ** Removed `grunt-devcode` in favor of [`grunt-preprocess`](https://github.com/jsoverson/grunt-preprocess)
 ** Using `grunt-contrib-compass` watch option instead of a `watch` sub-task.
-** Enabled `livereload`
+** Enabled `livereload` feature
+** `send` task only allows testing on development environment. Transitory solution while looking for better integration with production environments.
 
 
 
@@ -74,7 +76,6 @@ Sources are located in the `src` folder:
 	* `_main.scss`: **your email style**
 	* `style.scss`: glue stylesheet, don't edit it directly
 * `images`: source images of your email
-* `css`: destination folder of compiled SCSS sources
 * `inc`: optional partials files (requires a `render` task to be set)
 * `data`: optional JSON files with variables (requires a `render` task to be set)
 
@@ -84,18 +85,19 @@ The boilerplate comes with some predefined tasks to cover average email developm
 
 **`dev` Tasks**
 
-This tasks runs a watch trigger for changes to the `scss` folder and starts a static HTTP server at `http://localhost:8000` pointing to the `src` folder.
+This tasks runs a watch trigger for changes to sources inside the `src` folder and starts a static HTTP server at `http://localhost:8000` pointing to the `tmp` folder where processed resources are store.
+
+NOTE: This tasks doesn't apply any style inlining.
 
 **`dist` Tasks**
 
-This tasks creates a build from your sources. It creates a folder named `dist{YYYYMMDD}` next to `src`, then compiles your SCSSes and inlines the resulting stylesheet in the HTML source through Premailer. By default, Premailer outputs a text version too. 
+This tasks creates a build from your sources. It creates a folder named `dist` next to `src`, then compiles your SCSSes and inlines the resulting stylesheet in the HTML source through Premailer. By default, Premailer outputs a text version too. 
 
 Images are optimized with jpegtran and OptiPNG.
 
 **`send` Tasks** (was `test` before v0.2.3)
 
-Extends `dev` and `dist` tasks by sending the compiled email to any configured recipient. In order to use this task you have to provide a target environment by running either `send:dev` or `send:dist`.  
-To customize email transports and recipients refer to the `send` tasks in `Gruntfile.js`.
+Extends `dev` by sending the compiled email to any configured recipient.
 
 ###Tasks Customization
 

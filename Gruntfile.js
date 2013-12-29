@@ -22,13 +22,13 @@ module.exports = function(grunt) {
          */
         paths: {
             //where to store built files
-            dist: 'dist<%= grunt.template.today("yyyymmdd") %>',
+            dist: 'dist',
             //sources
             src: 'src',
             //where json files are stored
             data: '<%= paths.src %>/data',
             //temporary files
-            tmp: '.tmp',
+            tmp: 'tmp',
             //pattern to HTML email files
             email: '*.html'
         },
@@ -44,7 +44,6 @@ module.exports = function(grunt) {
                 url: 'http://www.mydomain.com',
                 host: 'remote.host',
                 username: 'username',
-                password: 'password',
                 path: '/path/to/www'
             },
             development: {
@@ -52,7 +51,6 @@ module.exports = function(grunt) {
                 url: 'http://localhost',
                 host: 'local.host',
                 username: 'username',
-                password: 'password',
                 path: '/path/to/www',
                 port: 8000
             }
@@ -64,7 +62,7 @@ module.exports = function(grunt) {
          * ===============================
          */
         clean: {
-            all: ['<%= paths.dist %>', '<%= paths.tmp %>']
+            all: ['dist*', '<%= paths.tmp %>']
         },
 
 
@@ -168,20 +166,28 @@ module.exports = function(grunt) {
          * ===============================
          */
         premailer: {
+            options: {
+                preserveStyles: true
+            },
 
             dist_html: {
                 options: {
                     //see https://github.com/dwightjack/grunt-premailer#options
                     //css is used to be sure that external CSS files are parsed
                     css: ['<%= paths.dist %>/css/*.css'],
-                    baseUrl: '<%= hosts.production.url %>'
+                    baseUrl: '<%= hosts.production.url %>/'
                 },
-                src: ['<%= paths.dist %>/<%= paths.email %>']
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.dist %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.dist %>/'
+                }]
 
             },
             dist_txt: {
                 options: {
-                    baseUrl: '<%= hosts.production.url %>',
+                    baseUrl: '<%= hosts.production.url %>/',
                     mode: 'txt'
                 },
                 files: [{
@@ -197,13 +203,18 @@ module.exports = function(grunt) {
             dev_html: {
                 options: {
                     css: ['<%= paths.tmp %>/css/*.css'],
-                    baseUrl: '<%= hosts.development.url %>'
+                    baseUrl: '<%= hosts.development.url %>:<%= hosts.development.port %>/'
                 },
-                src: ['<%= paths.tmp %>/<%= paths.email %>']
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.tmp %>/'
+                }]
             },
             dev_txt: {
                 options: {
-                    baseUrl: '<%= hosts.development.url %>',
+                    baseUrl: '<%= hosts.development.url %>:<%= hosts.development.port %>/',
                     mode: 'txt'
                 },
                 files: [{
@@ -358,42 +369,63 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', 'dev');
 
-    grunt.registerTask('dev', [
+    //(used internally)
+    grunt.registerTask('base_dev', [
         'clean',
         'copy',
         'compass:dev',
         'render',
-        'preprocess:dev',
+        'preprocess:dev'
+    ]);
+
+
+    grunt.registerTask('dev', [
+        'base_dev',
         'connect:dev',
         'concurrent'
     ]);
 
+
     grunt.registerTask('dist', [
         'clean',
-        'imagemin:dist',
+        'copy',
+        'imagemin',
         'compass:dist',
-        'render:dist',
-        'devcode:dist',
+        'render',
+        'preprocess:dist',
         'premailer:dist_html',
         'premailer:dist_txt'
     ]);
 
-    grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
-        if (env === 'dev') {
-            grunt.task.run([
-                'compass:dev',
-                'render:dev',
-                'devcode:dev',
-                'premailer:dev_html',
-                'premailer:dev_txt',
-                'nodemailer:dev',
-                'connect:send'
-            ]);
-        } else if (env === 'dist') {
-            grunt.task.run(['dist', 'nodemailer:dist']);
-        } else {
-            grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
-        }
+    grunt.registerTask('send', 'Simulates an email delivery.', function() {
+        grunt.task.run([
+            'base_dev',
+            'premailer:dev_html',
+            'premailer:dev_txt',
+            'nodemailer:dev',
+            'connect:send_dev'
+        ]);
     });
+
+
+
+    // grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
+    //     if (env === 'dev') {
+    //         grunt.task.run([
+    //             'base_dev',
+    //             'premailer:dev_html',
+    //             'premailer:dev_txt',
+    //             'nodemailer:dev',
+    //             'connect:send_dev'
+    //         ]);
+    //     } else if (env === 'dist') {
+    //         grunt.task.run([
+    //             'dist',
+    //             'nodemailer:dist'
+    //         ]);
+    //     } else {
+    //         grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
+    //     }
+    // });
 
 };

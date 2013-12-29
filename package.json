@@ -43,6 +43,7 @@
     "grunt-premailer": "~0.2.3",
     "load-grunt-tasks": "~0.2.1",
     "grunt-preprocess": "~4.0.0",
-    "grunt-concurrent": "~0.4.2"
+    "grunt-concurrent": "~0.4.2",
+    "grunt-rsync": "~0.2.1"
   }
 }
