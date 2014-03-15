@@ -8,7 +8,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
-* Environment specific code blocks in HTML with [grunt-devcode](https://github.com/livedata/grunt-devcode) (a custom version, actually)
+* Environment specific code blocks in HTML with [grunt-preprocess](https://github.com/jsoverson/grunt-preprocess) 
 * test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
@@ -17,7 +17,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * Grunt-cli >= 0.1.7 and Grunt >=0.4.2 (`npm install grunt-cli -g`)
 * Ruby >= 1.9.3 ([installers](http://www.ruby-lang.org/en/downloads/))
 * Compass >= 0.12.2 (`gem install compass`)
-* Premailer >= 1.7.9 (`gem install premailer` and, most of the time, `gem install hpricot`)
+* Premailer >= 1.8.0 (`gem install premailer` and, most of the time, `gem install hpricot`)
 
 ## Getting Started
 
@@ -42,7 +42,7 @@ To install the boilerplate
 Version 0.3 introduces several changes to included plugins, tasks and folders' structure:
 
 * **System changes**
-	* Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.7.9 and Grunt >=0.4.2
+	* Boilerplate now requires Node.js >= 0.10.20, Ruby >= 1.9.3, Premailer >= 1.8.0 and Grunt >=0.4.2
 * **Files and folder changes** 
 	* `data` folder moved into `src`
 	* intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
@@ -112,6 +112,9 @@ By default tasks refer to `http://localhost:8000` as the test URL, anyway you ma
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.3.1  
+	- Packages and docs updates.
+
 v0.3.0  
 	- Updated plugins and workflow. See section _0.2 to 0.3 Changes_ for details.
 
