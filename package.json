@@ -36,11 +36,11 @@
     "grunt-contrib-watch": "~0.6",
     "grunt-contrib-connect": "~0.7",
     "grunt-contrib-copy": "~0.5",
-    "grunt-contrib-imagemin": "~0.5",
+    "grunt-contrib-imagemin": "~0.6",
     "grunt-contrib-clean": "~0.5",
     "grunt-contrib-compass": "~0.7",
     "grunt-ejs-render": "~0.2",
-    "grunt-premailer": "~0.2.4",
+    "grunt-premailer": "~0.2.5",
     "load-grunt-tasks": "~0.4.0",
     "grunt-preprocess": "~4.0.0",
     "grunt-concurrent": "~0.5.0"

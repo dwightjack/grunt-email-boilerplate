@@ -78,7 +78,17 @@ module.exports = function(grunt) {
                     src: ['**/*.{gif,png,jpg}'],
                     dest: '<%= paths.tmp %>/images'
                 }]
+            },
+
+            images_dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.src %>/images',
+                    src: ['**/*.{gif,png,jpg}'],
+                    dest: '<%= paths.dist %>/images'
+                }]
             }
+
         },
 
 
@@ -240,7 +250,7 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.tmp %>/images',
+                    cwd: '<%= paths.dist %>/images',
                     src: ['**/*.{gif,png,jpg}'],
                     dest: '<%= paths.dist %>/images'
                 }]
@@ -372,7 +382,7 @@ module.exports = function(grunt) {
     //(used internally)
     grunt.registerTask('base_dev', [
         'clean',
-        'copy',
+        'copy:images',
         'compass:dev',
         'render',
         'preprocess:dev'
@@ -388,7 +398,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('dist', [
         'clean',
-        'copy',
+        'copy:images_dist',
         'imagemin',
         'compass:dist',
         'render',

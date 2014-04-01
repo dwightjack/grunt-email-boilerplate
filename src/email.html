@@ -1,23 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width"/>
 	<title>Your Message Subject or Title</title>
-	<style type="text/css">
-		/* Based on The MailChimp Reset INLINE: Yes. */
-		/* Client-specific Styles */
-		#outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
-		body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
-		/* Prevent Webkit and Windows Mobile platforms from changing default font sizes.*/
-		.ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */
-		.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
-		/* Forces Hotmail to display normal line spacing.  More on that: http://www.emailonacid.com/forum/viewthread/43/ */
-		#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
-		/* End reset */
-	</style>
-	<!-- NOTE: always refer to CSS with relative paths! -->
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
 	<!-- Targeting Windows Mobile -->
 	<!--[if IEMobile 7]>
@@ -37,49 +24,21 @@
 		/* Target Outlook 2007 and 2010 */
 		</style>
 	<![endif]-->
-</head>
-<body>
-<!-- Wrapper/Container Table: Use a wrapper table to control the width and the background color consistently of your email. Use this approach instead of setting attributes on the body tag. -->
-<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
-	<tr>
-		<td valign="top">
-		<!-- Tables are the most common way to format your email consistently. Set your table widths inside cells and in most cases reset cellpadding, cellspacing, and border to zero. Use nested tables as a way to space effectively in your message. -->
-		<table cellpadding="0" cellspacing="0" border="0" align="center">
-			<tr>
-				<!-- EJS templating support... -->
-				<td width="200" valign="top" id="test">If your name is <%= data.user.name %>...</td>
-				<!-- include helper. files are relative to `src`... -->
-				<td width="200" valign="top"><% include inc/_hello.html %></td>
-				<td width="200" valign="top">
-					A PNG test image
-					<img src="images/test-png.png" alt="png test"/>
-					<br />
 
-					A GIF test image
-					<img src="images/test-gif.gif" alt="gif test"/>
-					<br />
+  </head>
+  <body>
+    <table cellpadding="0" cellspacing="0" border="0" class="body">
+      <tr>
+        <td class="center" align="center" valign="top">
+          <center>
 
-					A JPG test image
-					<img src="images/test-jpg.jpg" alt="jpg test"/>
-					<br />
-				</td>
-			</tr>
-		</table>
-		<!-- End example table -->
+			<!-- Replace this contents with yout email body-->
+          	<% include inc/_example-header.html %>
+          	<% include inc/_example-body.html %>
 
-		<!-- Yahoo Link color fix updated: Simply bring your link styling inline. -->
-		<a href="http://htmlemailboilerplate.com" target ="_blank" title="Styling Links" style="color: orange; text-decoration: none;">Coloring Links appropriately</a>
-
-		<!-- Gmail/Hotmail image display fix -->
-		<img class="image_fix" src="images/test-gif.gif" alt="Your alt text" title="Your title text" width="x" height="x" />
-
-		<!-- Working with telephone numbers (including sms prompts).  Use the "mobile" class to style appropriately in desktop clients
-		versus mobile clients. -->
-		<span class="mobile_link">123-456-7890</span>
-
-		</td>
-	</tr>
-</table>
-<!-- End of wrapper table -->
-</body>
+          </center>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>
