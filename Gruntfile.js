@@ -258,6 +258,26 @@ module.exports = function(grunt) {
         },
 
 
+        htmlmin: {
+            dist: {
+                options: {
+                    keepClosingSlash: true,
+                    conservativeCollapse: true,
+                    minifyCSS: {
+                        noAdvanced: true,
+                        compatibility: 'ie8'
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.dist %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.dist %>/'
+                }]
+            }
+        },
+
+
         /**
          * Test Mailer Tasks (used internally)
          * ===============================
@@ -295,7 +315,7 @@ module.exports = function(grunt) {
                 // HTML and TXT email
                 // A collection of recipients
                 recipients: [{
-                    email: 'jane.doe@gmail.com',
+                    email: 'marco.solazzi@gmail.com',
                     name: 'Jane Doe'
                 }]
             },
@@ -404,7 +424,8 @@ module.exports = function(grunt) {
         'render',
         'preprocess:dist',
         'premailer:dist_html',
-        'premailer:dist_txt'
+        'premailer:dist_txt',
+        'htmlmin:dist'
     ]);
 
     grunt.registerTask('send', 'Simulates an email delivery.', function() {
