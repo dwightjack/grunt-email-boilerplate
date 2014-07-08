@@ -78,7 +78,17 @@ module.exports = function(grunt) {
                     src: ['**/*.{gif,png,jpg}'],
                     dest: '<%= paths.tmp %>/images'
                 }]
+            },
+
+            images_dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.src %>/images',
+                    src: ['**/*.{gif,png,jpg}'],
+                    dest: '<%= paths.dist %>/images'
+                }]
             }
+
         },
 
 
@@ -240,9 +250,29 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.tmp %>/images',
+                    cwd: '<%= paths.dist %>/images',
                     src: ['**/*.{gif,png,jpg}'],
                     dest: '<%= paths.dist %>/images'
+                }]
+            }
+        },
+
+
+        htmlmin: {
+            dist: {
+                options: {
+                    keepClosingSlash: true,
+                    conservativeCollapse: true,
+                    minifyCSS: {
+                        noAdvanced: true,
+                        compatibility: 'ie8'
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.dist %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.dist %>/'
                 }]
             }
         },
@@ -285,7 +315,7 @@ module.exports = function(grunt) {
                 // HTML and TXT email
                 // A collection of recipients
                 recipients: [{
-                    email: 'jane.doe@gmail.com',
+                    email: 'marco.solazzi@gmail.com',
                     name: 'Jane Doe'
                 }]
             },
@@ -372,7 +402,7 @@ module.exports = function(grunt) {
     //(used internally)
     grunt.registerTask('base_dev', [
         'clean',
-        'copy',
+        'copy:images',
         'compass:dev',
         'render',
         'preprocess:dev'
@@ -388,13 +418,14 @@ module.exports = function(grunt) {
 
     grunt.registerTask('dist', [
         'clean',
-        'copy',
+        'copy:images_dist',
         'imagemin',
         'compass:dist',
         'render',
         'preprocess:dist',
         'premailer:dist_html',
-        'premailer:dist_txt'
+        'premailer:dist_txt',
+        'htmlmin:dist'
     ]);
 
     grunt.registerTask('send', 'Simulates an email delivery.', function() {
