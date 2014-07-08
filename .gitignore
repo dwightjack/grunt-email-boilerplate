@@ -172,3 +172,4 @@ node_modules
 .sass-cache
 .tags
 config/nodemailer-*
+Gemfile.lock

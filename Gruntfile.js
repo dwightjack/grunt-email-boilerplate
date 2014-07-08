@@ -3,6 +3,7 @@ module.exports = function(grunt) {
     'use strict';
 
     var path = require('path');
+    var transports = grunt.file.exists('config/nodemailer-transport.json') ? grunt.file.readJSON('config/nodemailer-transport.json') : {};
 
     require('load-grunt-tasks')(grunt);
 
@@ -104,7 +105,8 @@ module.exports = function(grunt) {
                 //see https://github.com/gruntjs/grunt-contrib-compass
                 config: path.normalize(__dirname + '/vendor/compass-config.rb'),
                 cssDir: '<%= paths.tmp %>/css',
-                imagesDir: '<%= paths.tmp %>/images'
+                imagesDir: '<%= paths.tmp %>/images',
+                bundleExec: grunt.file.exists(path.normalize(process.cwd() + 'Gemfile'))
             },
 
             watch: {
@@ -147,9 +149,10 @@ module.exports = function(grunt) {
 
         /**
          * Environment Related Tasks (used internally)
+         * FIXME: DEPRECATED
          * ===============================
          */
-        preprocess: {
+        /*preprocess: {
             options: {
                 inline: true
             },
@@ -166,10 +169,28 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= paths.tmp %>/',
                     src: ['<%= paths.email %>'],
-                    dest: '<%= paths.dist %>/'
+                    dest: '<%= paths.tmp %>/'
+                }]
+            }
+        },*/
+
+
+        /**
+         * Section comment block
+         * ===============================
+         */
+        htmlrefs: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>/',
+                    src: ['<%= paths.email %>'],
+                    dest: '<%= paths.tmp %>/'
                 }]
             }
         },
+
+
 
         /**
          * Premailer Parser Tasks (used internally)
@@ -185,11 +206,12 @@ module.exports = function(grunt) {
                     //see https://github.com/dwightjack/grunt-premailer#options
                     //css is used to be sure that external CSS files are parsed
                     css: ['<%= paths.dist %>/css/*.css'],
-                    baseUrl: '<%= hosts.production.url %>/'
+                    baseUrl: '<%= hosts.production.url %>/',
+                    preserveStyles: false
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.dist %>/',
+                    cwd: '<%= paths.tmp %>/',
                     src: ['<%= paths.email %>'],
                     dest: '<%= paths.dist %>/'
                 }]
@@ -202,7 +224,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.dist %>/',
+                    cwd: '<%= paths.tmp %>/',
                     src: ['<%= paths.email %>'],
                     dest: '<%= paths.dist %>/',
                     ext: '.txt'
@@ -219,7 +241,11 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= paths.tmp %>/',
                     src: ['<%= paths.email %>'],
-                    dest: '<%= paths.tmp %>/'
+                    dest: '<%= paths.tmp %>/',
+                    //need this since nokogiri breaks when src and dest are the same file
+                    rename: function (src, dest) {
+                        return '<%= paths.tmp %>/parsed-' + dest;
+                    }
                 }]
             },
             dev_txt: {
@@ -232,7 +258,11 @@ module.exports = function(grunt) {
                     cwd: '<%= paths.tmp %>/',
                     src: ['<%= paths.email %>'],
                     dest: '<%= paths.tmp %>/',
-                    ext: '.txt'
+                    ext: '.txt',
+                    //need this since nokogiri breaks when src and dest are the same file
+                    rename: function (src, dest) {
+                        return '<%= paths.tmp %>/parsed-' + dest;
+                    }
                 }]
             }
         },
@@ -305,7 +335,7 @@ module.exports = function(grunt) {
                  * }
                  */
                 /* ,*/
-                transport: grunt.file.readJSON('config/nodemailer-transport.json'),
+                transport: transports,
 
                 message: {
                     from: '<John Doe> john.doe@gmail.com'
@@ -325,7 +355,7 @@ module.exports = function(grunt) {
             },
 
             dev: {
-                src: ['<%= paths.tmp %>/<%= paths.email %>']
+                src: ['<%= paths.tmp %>/parsed-<%= paths.email %>']
             }
 
         },
@@ -404,8 +434,8 @@ module.exports = function(grunt) {
         'clean',
         'copy:images',
         'compass:dev',
-        'render',
-        'preprocess:dev'
+        'render'/*,
+        'preprocess:dev'*/
     ]);
 
 
@@ -422,7 +452,8 @@ module.exports = function(grunt) {
         'imagemin',
         'compass:dist',
         'render',
-        'preprocess:dist',
+        'htmlrefs:dist',
+        //'preprocess:dist',
         'premailer:dist_html',
         'premailer:dist_txt',
         'htmlmin:dist'

@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+gem "sass", ">=3.2.19"
+gem "sass-globbing", "~>1.1.0"
+gem "compass" , "~>0.12.6"
+gem "premailer" , "~>1.8.2"
+gem "nokogiri" , "~>1.6.2"
