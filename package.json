@@ -1,7 +1,7 @@
 {
   "name": "grunt-email-boilerplate",
   "description": "An Enhanced HTML E-mail Boilerplate",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": {
     "name": "Marco \"DWJ\" Solazzi",
     "url": "https://github.com/dwightjack"
@@ -44,7 +44,6 @@
     "grunt-htmlrefs": "^0.5.0",
     "grunt-nodemailer": "~0.2.1",
     "grunt-premailer": "~0.2.10",
-    "grunt-preprocess": "~4.0.0",
     "load-grunt-tasks": "~0.6.0"
   }
 }

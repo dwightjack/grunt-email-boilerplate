@@ -1,6 +1,6 @@
 #Grunt Email Boilerplate
 
-A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
+A grunt-ready HTML email template based on cand [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
 
 ##Features
 
@@ -8,16 +8,15 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
 * inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
-* Environment specific code blocks in HTML with [grunt-preprocess](https://github.com/jsoverson/grunt-preprocess) 
+* Environment specific code blocks in HTML with [grunt-htmlrefs](https://github.com/tactivos/grunt-htmlrefs)
 * test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
 
 ##Requirements
 
 * Node.js >= 0.10.20 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Grunt-cli >= 0.1.7 and Grunt >=0.4.2 (`npm install grunt-cli -g`)
+* Grunt-cli >= 0.1.7 and Grunt >=0.4.5 (`npm install grunt-cli -g`)
 * Ruby >= 1.9.3 ([installers](http://www.ruby-lang.org/en/downloads/))
-* Compass >= 0.12.2 (`gem install compass`)
-* Premailer >= 1.8.0 (`gem install premailer` and, most of the time, `gem install hpricot`)
+* Bundler >= 1.6.0 (`gem install bundler`)
 
 ## Getting Started
 
@@ -27,17 +26,36 @@ To install the boilerplate
 
 2. clone this git repo
 
-	`git clone git://github.com/dwightjack/grunt-email-boilerplate.git`
+	git clone git://github.com/dwightjack/grunt-email-boilerplate.git
 
-3. install node dependencies:
+3. install node and ruby dependencies:
 	
-	`cd grunt-email-boilerplate`
+	cd grunt-email-boilerplate
+	npm install
+	bundle update
 
-	`npm install`
+	
 
 4. Run the development task `grunt dev` and start editing email files in `src` folder (by default `email.html` and `scss/_main.scss`). By default, Grunt will try to open the email preview in your default browser; alternatively, preview URL is `http://localhost:8000/`.
 
-## 0.2 to 0.3 Changes
+##<a name="0.3-0.4"/>0.3 to 0.4 Changes
+
+Version 0.4 introduces several changes to included plugins, tasks and folders' structure:
+
+* **System changes**
+	* Boilerplate now includes Zurb's [Ink](https://github.com/zurb/ink) to provide responsive e-mail templating
+	* System requirements are Node.js >= 0.10.20, Grunt, Ruby >= 1.9.3 and **Bundler** >= 1.6.0
+* **Files and folder changes** 
+	* `data` folder moved into `src`
+	* intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
+	* build folder `dist` is no more suffixed with current date 
+* **Tasks and configuration changes**
+	* Updated all tasks to latest versions
+	* Added [`grunt-contrib-htmlmin`](https://github.com/gruntjs/grunt-contrib-htmlmin).
+	* Deprecated `grunt-preprocess` in favor of [`grunt-htmlrefs`](https://github.com/tactivos/grunt-htmlrefs) as an environment specific switcher
+	* By default Premailer now uses [Nokogiri](http://nokogiri.org/) instead of [Hpricot](https://github.com/hpricot/hpricot)
+
+##<a name="0.2-0.3"/>0.2 to 0.3 Changes
 
 Version 0.3 introduces several changes to included plugins, tasks and folders' structure:
 
@@ -71,7 +89,7 @@ Sources are located in the `src` folder:
 	* `_variables.scss`: boilerplate style variables
 	* `_mixins.scss`: mixins and premailer attributes helpers 
 	* `_base.scss`: common styles
-	* `_media-queries.scss`: optional media queries for responsive emails
+	* `_ink.scss`: [Ink](https://github.com/zurb/ink) main file
 	* `_main.scss`: **your email style**
 	* `style.scss`: glue stylesheet, don't edit it directly
 * `images`: source images of your email
@@ -112,11 +130,14 @@ By default tasks refer to `http://localhost:8000` as the test URL, anyway you ma
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](http://www.gruntjs.com).
 
 ## Release History
+v0.4.0
+	- Moved to [Ink](https://github.com/zurb/ink) to provide responsive e-mails capability. See section [0.3 to 0.4 Changes](#0.3-0.4)for details.
+
 v0.3.1  
 	- Packages and docs updates.
 
 v0.3.0  
-	- Updated plugins and workflow. See section _0.2 to 0.3 Changes_ for details.
+	- Updated plugins and workflow. See section [0.2 to 0.3 Changes](#0.2-0.3") for details.
 
 v0.2.4  
 	- updated [grunt-premailer](https://github.com/dwightjack/grunt-premailer) to v0.2.0.
