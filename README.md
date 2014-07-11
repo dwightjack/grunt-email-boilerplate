@@ -5,11 +5,12 @@ A grunt-ready HTML email template based on cand [HTML Email Boilerplate](http://
 ##Features
 
 * SCSS stylesheets with [Compass](http://compass-style.org/)
-* image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
-* inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
+* Image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
+* Inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
 * Environment specific code blocks in HTML with [grunt-htmlrefs](https://github.com/tactivos/grunt-htmlrefs)
-* test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
+* Test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
+* Test on multiple devices with [Litmus](https://litmus.com/) and [grunt-litmus](https://github.com/jeremypeter/grunt-litmus)
 
 ##Requirements
 
@@ -51,8 +52,9 @@ Version 0.4 introduces several changes to included plugins, tasks and folders' s
 	* build folder `dist` is no more suffixed with current date 
 * **Tasks and configuration changes**
 	* Updated all tasks to latest versions
-	* Added [`grunt-contrib-htmlmin`](https://github.com/gruntjs/grunt-contrib-htmlmin).
-	* Deprecated `grunt-preprocess` in favor of [`grunt-htmlrefs`](https://github.com/tactivos/grunt-htmlrefs) as an environment specific switcher
+	* Added [grunt-litmus](https://github.com/jeremypeter/grunt-litmus) for remote testing
+	* Added [grunt-contrib-htmlmin](https://github.com/gruntjs/grunt-contrib-htmlmin).
+	* Deprecated grunt-preprocess in favor of [grunt-htmlrefs](https://github.com/tactivos/grunt-htmlrefs) as an environment specific switcher
 	* By default Premailer now uses [Nokogiri](http://nokogiri.org/) instead of [Hpricot](https://github.com/hpricot/hpricot)
 
 ##<a name="0.2-0.3"/>0.2 to 0.3 Changes
@@ -116,6 +118,10 @@ Images are optimized with jpegtran and OptiPNG.
 
 Extends `dev` by sending the compiled email to any configured recipient.
 
+**`test` Task**
+
+Extends `dist` by sending a remote test to [Litmus](https://litmus.com/).
+
 ###Tasks Customization
 
 See `Gruntfile.js` source for more options and customizations.
@@ -131,7 +137,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 v0.4.0
-	- Moved to [Ink](https://github.com/zurb/ink) to provide responsive e-mails capability. See section [0.3 to 0.4 Changes](#0.3-0.4)for details.
+	- Moved to [Ink](https://github.com/zurb/ink) to provide responsive e-mails capability. Added [Litmus](https://litmus.com/) testing capability. See section [0.3 to 0.4 Changes](#0.3-0.4)for details.
 
 v0.3.1  
 	- Packages and docs updates.

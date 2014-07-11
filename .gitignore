@@ -171,5 +171,5 @@ smtptransp.json
 node_modules
 .sass-cache
 .tags
-config/nodemailer-*
+config/*.json
 Gemfile.lock

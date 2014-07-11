@@ -3,7 +3,10 @@ module.exports = function(grunt) {
     'use strict';
 
     var path = require('path');
+    var _ = require('lodash');
     var transports = grunt.file.exists('config/nodemailer-transport.json') ? grunt.file.readJSON('config/nodemailer-transport.json') : {};
+    var litmusConf = grunt.file.exists('config/litmus.json') ? grunt.file.readJSON('config/litmus.json') : {};
+    var hostsConf = grunt.file.exists('config/hosts.json') ? grunt.file.readJSON('config/hosts.json') : {};
 
     require('load-grunt-tasks')(grunt);
 
@@ -39,23 +42,7 @@ module.exports = function(grunt) {
          * Hosts Configuration
          * ===============================
          */
-        hosts: {
-            //enter here yout production host details
-            production: {
-                url: 'http://www.mydomain.com',
-                host: 'remote.host',
-                username: 'username',
-                path: '/path/to/www'
-            },
-            development: {
-                //this is the default development domain
-                url: 'http://localhost',
-                host: 'local.host',
-                username: 'username',
-                path: '/path/to/www',
-                port: 8000
-            }
-        },
+        hosts: hostsConf,
 
 
         /**
@@ -345,7 +332,7 @@ module.exports = function(grunt) {
                 // HTML and TXT email
                 // A collection of recipients
                 recipients: [{
-                    email: 'jane.doe@gmail.com',
+                    email: 'marco.solazzi@gmail.com',
                     name: 'Jane Doe'
                 }]
             },
@@ -386,6 +373,7 @@ module.exports = function(grunt) {
             }
         },
 
+
         /**
          * Concurrent Task (used internally)
          * ===============================
@@ -396,6 +384,7 @@ module.exports = function(grunt) {
             },
             dev: ['watch', 'compass:watch']
         },
+
 
         /**
          * Server Tasks (used internally)
@@ -423,8 +412,63 @@ module.exports = function(grunt) {
                 }
             }
 
-        }
+        },
 
+
+        /**
+         * Remote testing
+         * ===============================
+         */
+        litmus: {
+            options: litmusConf,
+            dist: {
+                options: {
+                    //checkout https://yourprofilekey.litmus.com/emails/clients.xml
+                    //for client list
+                    //see https://github.com/jeremypeter/grunt-litmus for details
+                    clients: ['iphone5s', 'chromegmailnew']
+                },
+                src: ['<%= paths.dist %>/<%= paths.email %>']
+            }
+        },
+
+
+        /**
+         * Deploy via FTP
+         * ===============================
+         */
+        rsync: {
+            options: {
+                recursive: true,
+                compareMode: 'checksum',
+                syncDestIgnoreExcl: true,
+                args: ['--verbose', '--progress', '--cvs-exclude'],
+            },
+
+            dist: {
+                src: '<%= paths.dist %>',
+                dest: '<%= hosts.production.path %>',
+                host: '<%= hosts.production.username %>@<%= hosts.production.host %>'
+            }
+        },
+
+
+        /**
+         * Deploy via rsync
+         * ===============================
+         */
+        ftp: {
+            dist: {
+                auth: {
+                    host: '<%= hosts.production.host %>',
+                    port: 21,
+                    username: '<%= hosts.production.username %>',
+                    password: '<%= hosts.production.password %>'
+                },
+                src: '<%= paths.dist %>',
+                dest: '<%= hosts.production.path %>'
+            }
+        }
     });
 
     grunt.registerTask('default', 'dev');
@@ -460,6 +504,9 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('send', 'Simulates an email delivery.', function() {
+        if (Object.keys(transports).length === 0) {
+            grunt.fail.fatal('You need to setup nodemailer transport by adding/editing config/nodemailer-transport.json');
+        }
         grunt.task.run([
             'base_dev',
             'premailer:dev_html',
@@ -470,24 +517,27 @@ module.exports = function(grunt) {
     });
 
 
+    grunt.registerTask('deploy', 'Deploy compiled email to remote host.', function() {
+        var deployTask = grunt.config.get('hosts.production.deploy');
+        var taskList = ['dist'];
+        if (!deployTask) {
+            grunt.fail.fatal('No deploy method found. Did you configured your config/hosts.json?');
+        }
+        if (['ftp', 'rsync', 'none'].indexOf(deployTask) === -1) {
+            grunt.fail.fatal('Deploy methods may be either "ftp", "rsync" or "none". "' + deployTask + '" was passed in.');
+        }
+        if (deployTask !== 'none') {
+            taskList.push(deployTask + ':dist');
+        }
+        grunt.task.run(taskList);
 
-    // grunt.registerTask('send', 'Simulates an email delivery. Either use "send:dev" or "send:dist"', function(env) {
-    //     if (env === 'dev') {
-    //         grunt.task.run([
-    //             'base_dev',
-    //             'premailer:dev_html',
-    //             'premailer:dev_txt',
-    //             'nodemailer:dev',
-    //             'connect:send_dev'
-    //         ]);
-    //     } else if (env === 'dist') {
-    //         grunt.task.run([
-    //             'dist',
-    //             'nodemailer:dist'
-    //         ]);
-    //     } else {
-    //         grunt.fail.fatal('Test environment needed. Either use "send:dev" or "send:dist"');
-    //     }
-    // });
+    });
+
+    grunt.registerTask('test', 'Production email testing', function () {
+        if (Object.keys(litmusConf).length === 0) {
+            grunt.fail.fatal('You need to setup your Litmus account details by adding/editing config/litmus.json');
+        }
+        grunt.task.run(['deploy', 'litmus:dist']);
+    });
 
 };
