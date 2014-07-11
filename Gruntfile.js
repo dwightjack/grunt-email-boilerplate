@@ -3,7 +3,6 @@ module.exports = function(grunt) {
     'use strict';
 
     var path = require('path');
-    var _ = require('lodash');
     var transports = grunt.file.exists('config/nodemailer-transport.json') ? grunt.file.readJSON('config/nodemailer-transport.json') : {};
     var litmusConf = grunt.file.exists('config/litmus.json') ? grunt.file.readJSON('config/litmus.json') : {};
     var hostsConf = grunt.file.exists('config/hosts.json') ? grunt.file.readJSON('config/hosts.json') : {};
@@ -446,9 +445,11 @@ module.exports = function(grunt) {
             },
 
             dist: {
-                src: '<%= paths.dist %>',
-                dest: '<%= hosts.production.path %>',
-                host: '<%= hosts.production.username %>@<%= hosts.production.host %>'
+                options: {
+                    src: '<%= paths.dist %>/',
+                    dest: '<%= hosts.production.path %>',
+                    host: '<%= hosts.production.username %>@<%= hosts.production.host %>'
+                }
             }
         },
 
@@ -457,13 +458,14 @@ module.exports = function(grunt) {
          * Deploy via rsync
          * ===============================
          */
-        ftp: {
+        'ftp-deploy': {
             dist: {
                 auth: {
                     host: '<%= hosts.production.host %>',
                     port: 21,
                     username: '<%= hosts.production.username %>',
-                    password: '<%= hosts.production.password %>'
+                    password: '<%= hosts.production.password %>',
+                    authKey: false
                 },
                 src: '<%= paths.dist %>',
                 dest: '<%= hosts.production.path %>'
@@ -503,17 +505,25 @@ module.exports = function(grunt) {
         'htmlmin:dist'
     ]);
 
-    grunt.registerTask('send', 'Simulates an email delivery.', function() {
+    grunt.registerTask('send', 'Simulates an email delivery.', function(target) {
         if (Object.keys(transports).length === 0) {
             grunt.fail.fatal('You need to setup nodemailer transport by adding/editing config/nodemailer-transport.json');
         }
-        grunt.task.run([
-            'base_dev',
-            'premailer:dev_html',
-            'premailer:dev_txt',
-            'nodemailer:dev',
-            'connect:send_dev'
-        ]);
+        if (target === 'dist') {
+            grunt.task.run(['deploy', 'nodemailer:dist']);
+        } else {
+            grunt.task.run([
+                'base_dev',
+                'premailer:dev_html',
+                'premailer:dev_txt',
+                'nodemailer:dev',
+                'connect:send_dev'
+            ]);
+        }
+    });
+
+    grunt.registerTask('ftp', 'ftp-deploy alias', function (target) {
+        grunt.task.run(['ftp-deploy', target].filter(Boolean).join(':'));
     });
 
 

@@ -9,6 +9,7 @@ A grunt-ready HTML email template based on cand [HTML Email Boilerplate](http://
 * Inlining CSS styles with [grunt-premailer](https://github.com/dwightjack/grunt-premailer) and [Premailer](http://premailer.dialect.ca/)
 * HTML templating with [EJS](https://github.com/visionmedia/ejs) and [more](https://github.com/dwightjack/grunt-ejs-render) 
 * Environment specific code blocks in HTML with [grunt-htmlrefs](https://github.com/tactivos/grunt-htmlrefs)
+* Deploy to remote location with [rsync](https://github.com/jedrichards/grunt-rsync) or [FTP](https://github.com/zonak/grunt-ftp-deploy)
 * Test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
 * Test on multiple devices with [Litmus](https://litmus.com/) and [grunt-litmus](https://github.com/jeremypeter/grunt-litmus)
 
@@ -45,17 +46,14 @@ Version 0.4 introduces several changes to included plugins, tasks and folders' s
 
 * **System changes**
 	* Boilerplate now includes Zurb's [Ink](https://github.com/zurb/ink) to provide responsive e-mail templating
-	* System requirements are Node.js >= 0.10.20, Grunt, Ruby >= 1.9.3 and **Bundler** >= 1.6.0
-* **Files and folder changes** 
-	* `data` folder moved into `src`
-	* intermediate files (as `_tmp.email.html`) are now stored in a temporary folder (`tmp` by default)
-	* build folder `dist` is no more suffixed with current date 
 * **Tasks and configuration changes**
 	* Updated all tasks to latest versions
-	* Added [grunt-litmus](https://github.com/jeremypeter/grunt-litmus) for remote testing
+	* Added `test` task with [grunt-litmus](https://github.com/jeremypeter/grunt-litmus) for remote testing
+	* Added `deploy` task with [rsync](https://github.com/jedrichards/grunt-rsync) or [FTP](https://github.com/zonak/grunt-ftp-deploy)
 	* Added [grunt-contrib-htmlmin](https://github.com/gruntjs/grunt-contrib-htmlmin).
 	* Deprecated grunt-preprocess in favor of [grunt-htmlrefs](https://github.com/tactivos/grunt-htmlrefs) as an environment specific switcher
 	* By default Premailer now uses [Nokogiri](http://nokogiri.org/) instead of [Hpricot](https://github.com/hpricot/hpricot)
+	* `send` task now allows testing on both development AND production environment. For production environments, the deploy task is triggered too
 
 ##<a name="0.2-0.3"/>0.2 to 0.3 Changes
 
@@ -118,9 +116,18 @@ Images are optimized with jpegtran and OptiPNG.
 
 Extends `dev` by sending the compiled email to any configured recipient.
 
+**`deploy` Task**
+
+Deploys files to production. Supported deploy methods are FTP and rsync. 
+
 **`test` Task**
 
 Extends `dist` by sending a remote test to [Litmus](https://litmus.com/).
+
+###Boilerplate configuration
+
+
+
 
 ###Tasks Customization
 
