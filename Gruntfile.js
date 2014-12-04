@@ -354,7 +354,7 @@ module.exports = function(grunt) {
         watch: {
             html: {
                 files: ['<%= paths.src %>/<%= paths.email %>', '<%= paths.src %>/inc/**/*.html', '<%= paths.data %>'],
-                tasks: ['render', 'preprocess:dev']
+                tasks: ['render']
             },
             images: {
                 files: ['<%= paths.src %>/images/**/*.{gif,png,jpg}'],
@@ -480,8 +480,7 @@ module.exports = function(grunt) {
         'clean',
         'copy:images',
         'compass:dev',
-        'render'/*,
-        'preprocess:dev'*/
+        'render'
     ]);
 
 
@@ -499,7 +498,6 @@ module.exports = function(grunt) {
         'compass:dist',
         'render',
         'htmlrefs:dist',
-        //'preprocess:dist',
         'premailer:dist_html',
         'premailer:dist_txt',
         'htmlmin:dist'
