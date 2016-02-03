@@ -278,6 +278,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     keepClosingSlash: true,
+                    collapseWhitespace: true,
                     conservativeCollapse: true,
                     minifyCSS: {
                         noAdvanced: true,
