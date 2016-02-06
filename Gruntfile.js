@@ -30,7 +30,9 @@ module.exports = function(grunt) {
             //temporary files
             tmp: 'tmp',
             //pattern to HTML email files
-            email: '*.html'
+            email: '*.html',
+            //Images directory
+            imagesDirectory: 'images'
         },
 
 
@@ -74,9 +76,9 @@ module.exports = function(grunt) {
             images: {
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.src %>/images',
+                    cwd: '<%= paths.src %>/<%= paths.imagesDirectory %>',
                     src: ['**/*.{gif,png,jpg}'],
-                    dest: '<%= paths.tmp %>/images'
+                    dest: '<%= paths.tmp %>/<%= paths.imagesDirectory %>'
                 }]
             }
         },
@@ -94,7 +96,7 @@ module.exports = function(grunt) {
                 //see https://github.com/gruntjs/grunt-contrib-compass
                 config: path.normalize(__dirname + '/vendor/compass-config.rb'),
                 cssDir: '<%= paths.tmp %>/css',
-                imagesDir: '<%= paths.tmp %>/images'
+                imagesDir: '<%= paths.tmp %>/<%= paths.imagesDirectory %>'
             },
 
             watch: {
@@ -108,7 +110,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     cssDir: '<%= paths.dist %>/css',
-                    imagesDir: '<%= paths.dist %>/images',
+                    imagesDir: '<%= paths.dist %>/<%= paths.imagesDirectory %>',
                     force: true,
                     environment: 'production'
                 }
@@ -240,9 +242,9 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= paths.tmp %>/images',
+                    cwd: '<%= paths.tmp %>/<%= paths.imagesDirectory %>',
                     src: ['**/*.{gif,png,jpg}'],
-                    dest: '<%= paths.dist %>/images'
+                    dest: '<%= paths.dist %>/<%= paths.imagesDirectory %>'
                 }]
             }
         },
@@ -311,7 +313,7 @@ module.exports = function(grunt) {
                 tasks: ['render', 'preprocess:dev']
             },
             images: {
-                files: ['<%= paths.src %>/images/**/*.{gif,png,jpg}'],
+                files: ['<%= paths.src %>/<%= paths.imagesDirectory %>/**/*.{gif,png,jpg}'],
                 tasks: ['copy:images']
             },
             livereload: {
@@ -321,7 +323,7 @@ module.exports = function(grunt) {
                 files: [
                     '<%= paths.tmp %>/css/**/*.css',
                     '<%= paths.tmp %>/<%= paths.email %>',
-                    '<%= paths.tmp %>/images/**/*.{gif,png,jpg}'
+                    '<%= paths.tmp %>/<%= paths.imagesDirectory %>/**/*.{gif,png,jpg}'
                 ]
             }
         },
