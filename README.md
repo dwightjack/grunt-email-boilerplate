@@ -1,8 +1,8 @@
-#Grunt Email Boilerplate
+# Grunt Email Boilerplate
 
 A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
 
-##Features
+## Features
 
 * SCSS stylesheets with [Compass](http://compass-style.org/)
 * image optimization with [jpegtran](http://jpegclub.org/jpegtran/) and [OptiPNG](http://optipng.sourceforge.net/)
@@ -11,7 +11,7 @@ A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmle
 * Environment specific code blocks in HTML with [grunt-preprocess](https://github.com/jsoverson/grunt-preprocess) 
 * test email delivery with [grunt-nodemailer](https://github.com/dwightjack/grunt-nodemailer) and [NodeMailer](https://github.com/andris9/Nodemailer)
 
-##Requirements
+## Requirements
 
 * Node.js >= 0.10.20 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * Grunt-cli >= 0.1.7 and Grunt >=0.4.2 (`npm install grunt-cli -g`)
@@ -60,7 +60,7 @@ Version 0.3 introduces several changes to included plugins, tasks and folders' s
 
 ## Documentation
 
-###Sources
+### Sources
 
 This boilerplate comes with a customized version of the [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
 
@@ -78,7 +78,7 @@ Sources are located in the `src` folder:
 * `inc`: optional partials files (requires a `render` task to be set)
 * `data`: optional JSON files with variables (requires a `render` task to be set)
 
-###Default Tasks
+### Default Tasks
 
 The boilerplate comes with some predefined tasks to cover average email development needs.
 
@@ -98,11 +98,11 @@ Images are optimized with jpegtran and OptiPNG.
 
 Extends `dev` by sending the compiled email to any configured recipient.
 
-###Tasks Customization
+### Tasks Customization
 
 See `Gruntfile.js` source for more options and customizations.
 
-###Tips and Tricks
+### Tips and Tricks
 
 1) **Connecting from a machine other than localhost**
 
