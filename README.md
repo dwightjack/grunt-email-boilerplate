@@ -60,7 +60,7 @@ Version 0.3 introduces several changes to included plugins, tasks and folders' s
 
 ## Documentation
 
-###Sources
+### Sources
 
 This boilerplate comes with a customized version of the [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
 
@@ -78,7 +78,7 @@ Sources are located in the `src` folder:
 * `inc`: optional partials files (requires a `render` task to be set)
 * `data`: optional JSON files with variables (requires a `render` task to be set)
 
-###Default Tasks
+### Default Tasks
 
 The boilerplate comes with some predefined tasks to cover average email development needs.
 
@@ -98,11 +98,11 @@ Images are optimized with jpegtran and OptiPNG.
 
 Extends `dev` by sending the compiled email to any configured recipient.
 
-###Tasks Customization
+### Tasks Customization
 
 See `Gruntfile.js` source for more options and customizations.
 
-###Tips and Tricks
+### Tips and Tricks
 
 1) **Connecting from a machine other than localhost**
 
