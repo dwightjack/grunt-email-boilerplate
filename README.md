@@ -2,6 +2,9 @@
 
 A grunt-ready HTML email template based on [HTML Email Boilerplate](http://htmlemailboilerplate.com/).
 
+
+:exclamation: :exclamation:**MAINTAINERS WANTED: I'm no longer maintaining this project. Feel free to drop me a line if you're interested in keeping up the development** :exclamation: :exclamation:
+
 ## Features
 
 * SCSS stylesheets with [Compass](http://compass-style.org/)
